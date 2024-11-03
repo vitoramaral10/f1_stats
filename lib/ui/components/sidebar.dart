@@ -13,6 +13,10 @@ class Sidebar extends StatelessWidget {
             title: const Text('Seasons'),
             onTap: () => Get.toNamed('/seasons'),
           ),
+          ListTile(
+            title: const Text('Drivers'),
+            onTap: () => Get.toNamed('/drivers'),
+          ),
         ],
       ),
     );
