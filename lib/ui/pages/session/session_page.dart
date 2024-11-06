@@ -18,7 +18,8 @@ class SessionPage extends GetView<GetxSessionPresenter> {
         () => ListView(
           children: [
             SessionTitle(session: controller.session),
-            WeatherCard(weather: controller.weather),
+            if (controller.weather != null)
+              WeatherCard(weather: controller.weather),
           ],
         ),
       ),

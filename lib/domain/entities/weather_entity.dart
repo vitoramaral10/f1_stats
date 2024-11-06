@@ -1,7 +1,7 @@
 class WeatherEntity {
   final double airTemperature;
   final DateTime date;
-  final int humidity;
+  final double humidity;
   final int meetingKey;
   final double pressure;
   final int rainfall;
