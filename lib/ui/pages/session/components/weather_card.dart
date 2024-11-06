@@ -13,7 +13,7 @@ class WeatherCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 4,
-      margin: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

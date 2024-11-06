@@ -21,11 +21,11 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData(
         colorScheme: ColorScheme.fromSwatch(
           primarySwatch: Colors.red,
-          brightness: Brightness.dark,
+          // brightness: Brightness.dark,
         ),
         useMaterial3: true,
       ),
-      themeMode: ThemeMode.dark,
+      // themeMode: ThemeMode.dark,
       initialRoute: Routes.initial,
       getPages: Routes.pages,
     );
