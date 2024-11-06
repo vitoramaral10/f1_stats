@@ -40,10 +40,11 @@ class MeetingModel {
       countryName: json['country_name'],
       dateStart: DateTime.parse(json['date_start']),
       gmtOffset: json['gmt_offset'],
-      location: json['location'],
+      location: utf8.decode(json['location'].runes.toList()),
       meetingKey: json['meeting_key'],
       meetingName: utf8.decode(json['meeting_name'].runes.toList()),
-      meetingOfficialName: json['meeting_official_name'],
+      meetingOfficialName:
+          utf8.decode(json['meeting_official_name'].runes.toList()),
       year: json['year'],
     );
   }
@@ -52,5 +53,6 @@ class MeetingModel {
         id: meetingKey,
         name: meetingName,
         dateStart: dateStart,
+        location: location,
       );
 }
