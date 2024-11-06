@@ -33,7 +33,7 @@ class HomePage extends GetView<GetxHomePresenter> {
                 itemCount: controller.meetings.length,
                 itemBuilder: (context, index) {
                   return MeetingTile(
-                    isExpanded: controller.selectedMeeting == index,
+                   
                     meeting: controller.meetings[index],
                     index: index,
                   );

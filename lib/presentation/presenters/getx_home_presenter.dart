@@ -51,11 +51,11 @@ class GetxHomePresenter extends GetxController implements HomePresenter {
   @override
   Future<void> getSessions(int meetingKey) async {
     try {
-      _sessions.assignAll([]);
+      _sessions.value = [];
 
       var result = await loadSessions.call(meetingKey: meetingKey);
 
-      result.sort((a, b) => b.dateStart.compareTo(a.dateStart));
+      result.sort((a, b) => a.dateStart.compareTo(b.dateStart));
       _sessions.assignAll(result);
     } on DomainError catch (error) {
       log(error.toString(), name: 'GetxHomePresenter.loadSessions');

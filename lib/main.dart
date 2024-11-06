@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'main/routes.dart';
 
-void main() {
+Future<void> main() async {
+  await initializeDateFormatting('pt_BR');
+
   runApp(const MyApp());
 }
 
@@ -15,7 +18,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'F1 Stats',
-      darkTheme: ThemeData.dark(),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.red,
+          brightness: Brightness.dark,
+        ),
+      ),
       themeMode: ThemeMode.dark,
       initialRoute: Routes.initial,
       getPages: Routes.pages,
