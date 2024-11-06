@@ -55,8 +55,14 @@ class SessionModel {
   }
 
   SessionEntity toEntity() => SessionEntity(
+        sessionKey: sessionKey,
+        sessionName: sessionName,
         dateEnd: dateEnd,
         dateStart: dateStart,
-        sessionName: sessionName,
+        location: location,
+        countryName: countryName,
+        sessionType: sessionType,
+        gmtOffset: gmtOffset,
+        circuitShortName: circuitShortName,
       );
 }

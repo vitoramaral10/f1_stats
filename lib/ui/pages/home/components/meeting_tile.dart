@@ -54,12 +54,7 @@ class MeetingTile extends GetView<GetxHomePresenter> {
                         'from ${DateFormat.jm().format(session.dateStart.toLocal())} '
                         'to ${DateFormat.jm().format(session.dateEnd.toLocal())}',
                       ),
-                      // onTap: () => Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //       builder: (context) =>
-                      //           DriversScreen(meeting: meeting, session: session)),
-                      // ),
+                      onTap: () => Get.toNamed('/session', arguments: session),
                     ),
                   )
                   .toList(),

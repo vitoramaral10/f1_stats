@@ -10,6 +10,11 @@ class Routes {
           name: '/',
           page: makeHomePage,
           binding: makeHomeBinding(),
+        ),
+        GetPage(
+          name: '/session',
+          page: makeSessionPage,
+          binding: makeSessionBinding(),
         )
       ];
 }
