@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:http/http.dart';
 
@@ -53,6 +54,7 @@ class HttpAdapter implements HttpClient {
     } on HttpError {
       rethrow;
     } catch (error) {
+      log(error.toString(), name: 'HttpAdapter.request');
       throw HttpError.serverError;
     }
   }
@@ -87,6 +89,7 @@ class HttpAdapter implements HttpClient {
           throw HttpError.conflict;
         }
       default:
+        log(response.body, name: 'HttpAdapter._handleResponse');
         throw HttpError.serverError;
     }
   }

@@ -10,6 +10,7 @@ class _HomeBinding extends Bindings {
   void dependencies() {
     Get.put(GetxHomePresenter(
       loadMeetings: makeRemoteLoadMeetings(),
+      loadSessions: makeRemoteLoadSessions(),
     ));
   }
 }

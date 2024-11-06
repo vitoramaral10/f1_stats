@@ -1,12 +1,12 @@
 class MeetingEntity {
-  final int id;
-  final String name;
+  final int meetingKey;
+  final String meetingName;
   final DateTime dateStart;
   final String location;
 
   MeetingEntity({
-    required this.id,
-    required this.name,
+    required this.meetingKey,
+    required this.meetingName,
     required this.dateStart,
     required this.location,
   });
