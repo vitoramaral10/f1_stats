@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.red,
           brightness: Brightness.dark,
         ),
+        useMaterial3: true,
       ),
       themeMode: ThemeMode.dark,
       initialRoute: Routes.initial,
