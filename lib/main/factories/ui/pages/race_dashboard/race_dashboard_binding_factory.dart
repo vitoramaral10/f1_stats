@@ -11,6 +11,8 @@ class _RaceDashboardBinding extends Bindings {
     Get.put(
       GetxRaceDashboardPresenter(
         loadMeetings: makeRemoteLoadMeetings(),
+        loadDrivers: makeRemoteLoadDrivers(),
+        loadPositions: makeRemoteLoadPositions(),
       ),
     );
   }
