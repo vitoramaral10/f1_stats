@@ -21,6 +21,8 @@ class GetxRaceDashboardPresenter extends GetxController
     required this.loadPositions,
   });
 
+  Timer _timer = Timer(Duration.zero, () {});
+
   final _meeting = Rxn<MeetingEntity>();
   final _drivers = Rx<List<DriverEntity>>([]);
   final _latestPositions = Rx<List<PositionEntity>>([]);
@@ -50,8 +52,10 @@ class GetxRaceDashboardPresenter extends GetxController
 
       Timer.periodic(
         const Duration(seconds: 5),
-        (_) async {
+        (timer) async {
+          _timer.cancel();
           await getLatestPosition();
+          _timer = timer;
         },
       );
     } on DomainError catch (error) {
@@ -129,5 +133,11 @@ class GetxRaceDashboardPresenter extends GetxController
           name: 'GetxRaceDashboardPresenter.getLatestPosition');
       rethrow;
     }
+  }
+
+  @override
+  void onClose() {
+    _timer.cancel();
+    super.onClose();
   }
 }

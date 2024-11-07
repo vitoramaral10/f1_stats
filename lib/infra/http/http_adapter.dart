@@ -74,6 +74,8 @@ class HttpAdapter implements HttpClient {
         throw HttpError.forbidden;
       case 404:
         throw HttpError.notFound;
+      case 429:
+        throw HttpError.tooManyRequests;
       case 409:
         if (response.body.contains('UserNotConfirmedException')) {
           final jsonDecoded = jsonDecode(response.body);

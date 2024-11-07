@@ -8,5 +8,5 @@ enum HttpError {
   accessExpired,
   conflict,
   userNotConfirmedException,
-  methodNotAllowed,
+  methodNotAllowed, tooManyRequests,
 }
