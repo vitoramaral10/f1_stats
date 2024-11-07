@@ -13,6 +13,7 @@ class _RaceDashboardBinding extends Bindings {
         loadMeetings: makeRemoteLoadMeetings(),
         loadDrivers: makeRemoteLoadDrivers(),
         loadPositions: makeRemoteLoadPositions(),
+        loadIntervals: makeRemoteLoadIntervals(),
       ),
     );
   }

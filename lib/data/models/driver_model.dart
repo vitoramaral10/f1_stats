@@ -50,6 +50,29 @@ class DriverModel {
     );
   }
 
+  final Map<String, String> _teamLogos = {
+    "Red Bull Racing":
+        "https://media.formula1.com/content/dam/fom-website/teams/2024/red-bull-racing-logo.png",
+    "McLaren":
+        "https://media.formula1.com/content/dam/fom-website/teams/2024/mclaren-logo.png",
+    "Alpine":
+        "https://media.formula1.com/content/dam/fom-website/teams/2024/alpine-logo.png",
+    "Aston Martin":
+        "https://media.formula1.com/content/dam/fom-website/teams/2024/aston-martin-logo.png",
+    "RB":
+        "https://media.formula1.com/content/dam/fom-website/teams/2024/rb-logo.png",
+    "Williams":
+        "https://media.formula1.com/content/dam/fom-website/teams/2024/williams-logo.png",
+    "Kick Sauber":
+        "https://media.formula1.com/content/dam/fom-website/teams/2024/alfa-romeo-racing-logo.png",
+    "Haas F1 Team":
+        "https://media.formula1.com/content/dam/fom-website/teams/2024/haas-f1-team-logo.png",
+    "Mercedes":
+        "https://media.formula1.com/content/dam/fom-website/teams/2024/mercedes-logo.png",
+    "Ferrari":
+        "https://media.formula1.com/content/dam/fom-website/teams/2024/ferrari-logo.png",
+  };
+
   DriverEntity toEntity() => DriverEntity(
         sessionKey: sessionKey,
         meetingKey: meetingKey,
@@ -62,6 +85,7 @@ class DriverModel {
         driverNumber: driverNumber,
         teamColor: Color(int.parse('0xFF$teamColor')),
         teamName: teamName,
+        teamLogo: _teamLogos[teamName] ?? '',
         nameAcronym: nameAcronym,
       );
 }

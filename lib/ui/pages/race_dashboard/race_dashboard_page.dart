@@ -63,7 +63,7 @@ class RaceDashboardPage extends GetView<GetxRaceDashboardPresenter> {
             return SingleChildScrollView(
               padding: const EdgeInsets.all(16),
               child: FutureBuilder(
-                  future: controller.getLatestPosition(),
+                  future: controller.startLiveUpdates(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
@@ -78,7 +78,7 @@ class RaceDashboardPage extends GetView<GetxRaceDashboardPresenter> {
                               ElevatedButton(
                                 onPressed: () async {
                                   try {
-                                    await controller.getLatestPosition();
+                                    await controller.startLiveUpdates();
                                   } catch (e) {
                                     // ignore: avoid_print
                                   }
@@ -104,6 +104,7 @@ class RaceDashboardPage extends GetView<GetxRaceDashboardPresenter> {
                           drivers: controller.drivers,
                           latestPositions: controller.latestPositions,
                           firstPositions: controller.firstPositions,
+                          intervals: controller.intervals,
                         ));
                   }),
             );
@@ -116,12 +117,14 @@ class DriversList extends StatelessWidget {
   final List<DriverEntity> drivers;
   final List<PositionEntity> latestPositions;
   final List<PositionEntity> firstPositions;
+  final List<IntervalEntity> intervals;
 
   const DriversList({
     super.key,
     required this.drivers,
     required this.latestPositions,
     required this.firstPositions,
+    required this.intervals,
   });
 
   @override
@@ -195,6 +198,28 @@ class DriversList extends StatelessWidget {
               (element) => element.driverNumber == position.driverNumber,
             );
 
+            IntervalEntity interval = IntervalEntity(
+                meetingKey: 0,
+                date: DateTime.now(),
+                sessionKey: 0,
+                driverNumber: 0,
+                gapToLeader: 0,
+                interval: 0);
+
+            if (intervals.isNotEmpty) {
+              interval = intervals.firstWhere(
+                (element) => element.driverNumber == position.driverNumber,
+                orElse: () => IntervalEntity(
+                  meetingKey: 0,
+                  date: DateTime.now(),
+                  sessionKey: 0,
+                  driverNumber: position.driverNumber,
+                  gapToLeader: 'OUT',
+                  interval: '',
+                ),
+              );
+            }
+
             final gainPosition = -((position.position -
                 firstPositions
                     .firstWhere(
@@ -217,8 +242,10 @@ class DriversList extends StatelessWidget {
                     child: Row(
                       children: [
                         SizedBox(width: 8),
-                        const Icon(Icons.circle,
-                            color: Colors.orange, size: 16),
+                        Image.network(
+                          driver.teamLogo,
+                          width: 24,
+                        ),
                         const SizedBox(width: 8),
                         Text(
                           driver.nameAcronym,
@@ -255,14 +282,21 @@ class DriversList extends StatelessWidget {
                 TableCell(
                   child: Center(
                     child: Text(
-                      'LEADER',
+                      (interval.gapToLeader == 0)
+                          ? 'LEADER'
+                          : (interval.gapToLeader == null)
+                              ? '-'
+                              : interval.gapToLeader.toString(),
                     ),
                   ),
                 ),
                 TableCell(
                   child: Center(
                     child: Text(
-                      '+0.000',
+                      (interval.interval == 0 ||
+                              interval.interval.runtimeType == String)
+                          ? ''
+                          : interval.interval.toString(),
                     ),
                   ),
                 ),

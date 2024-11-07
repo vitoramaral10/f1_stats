@@ -12,6 +12,7 @@ class DriverEntity {
   final int driverNumber;
   final Color teamColor;
   final String teamName;
+  final String teamLogo;
   final String nameAcronym;
 
   DriverEntity({
@@ -26,6 +27,7 @@ class DriverEntity {
     required this.driverNumber,
     required this.teamColor,
     required this.teamName,
+    required this.teamLogo,
     required this.nameAcronym,
   });
 }

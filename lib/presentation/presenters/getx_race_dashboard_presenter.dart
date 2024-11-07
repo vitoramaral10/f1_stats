@@ -14,19 +14,23 @@ class GetxRaceDashboardPresenter extends GetxController
   LoadMeetings loadMeetings;
   LoadDrivers loadDrivers;
   LoadPositions loadPositions;
+  LoadIntervals loadIntervals;
 
   GetxRaceDashboardPresenter({
     required this.loadMeetings,
     required this.loadDrivers,
     required this.loadPositions,
+    required this.loadIntervals,
   });
 
-  Timer _timer = Timer(Duration.zero, () {});
+  Timer _timer1 = Timer(Duration.zero, () {});
+  Timer _timer2 = Timer(Duration.zero, () {});
 
   final _meeting = Rxn<MeetingEntity>();
   final _drivers = Rx<List<DriverEntity>>([]);
   final _latestPositions = Rx<List<PositionEntity>>([]);
   final _firstpositions = Rx<List<PositionEntity>>([]);
+  final _intervals = Rx<List<IntervalEntity>>([]);
 
   @override
   MeetingEntity? get meeting => _meeting.value;
@@ -36,6 +40,8 @@ class GetxRaceDashboardPresenter extends GetxController
   List<PositionEntity> get latestPositions => _latestPositions.value;
   @override
   List<PositionEntity> get firstPositions => _firstpositions.value;
+  @override
+  List<IntervalEntity> get intervals => _intervals.value;
 
   @override
   Future<void> loadLatestMeeting() async {
@@ -82,65 +88,106 @@ class GetxRaceDashboardPresenter extends GetxController
 
   @override
   Future<void> getLatestPosition() async {
-    _timer = Timer.periodic(const Duration(seconds: 5), (_) async {
-      try {
-        final result = await loadPositions.call(
-          meetingKey: _meeting.value?.meetingKey.toString() ?? 'latest',
-          sessionKey: 'latest',
-        );
+    try {
+      final result = await loadPositions.call(
+        meetingKey: _meeting.value?.meetingKey.toString() ?? 'latest',
+        sessionKey: 'latest',
+      );
 
-        // deixa somente a primeira e a ultima posição de cada piloto com base no date
-        final latestPositions = result
-            .fold<Map<int, PositionEntity>>(
-              {},
-              (acc, position) {
-                final driverId = position.driverNumber;
-                if (acc[driverId] == null ||
-                    acc[driverId]!.date.isBefore(position.date)) {
-                  acc[driverId] = position;
-                }
-                return acc;
-              },
-            )
-            .values
-            .toList();
+      // deixa somente a primeira e a ultima posição de cada piloto com base no date
+      final latestPositions = result
+          .fold<Map<int, PositionEntity>>(
+            {},
+            (acc, position) {
+              final driverId = position.driverNumber;
+              if (acc[driverId] == null ||
+                  acc[driverId]!.date.isBefore(position.date)) {
+                acc[driverId] = position;
+              }
+              return acc;
+            },
+          )
+          .values
+          .toList();
 
-        final firstPositions = result
-            .fold<Map<int, PositionEntity>>(
-              {},
-              (acc, position) {
-                final driverId = position.driverNumber;
-                if (acc[driverId] == null ||
-                    acc[driverId]!.date.isAfter(position.date)) {
-                  acc[driverId] = position;
-                }
-                return acc;
-              },
-            )
-            .values
-            .toList();
+      final firstPositions = result
+          .fold<Map<int, PositionEntity>>(
+            {},
+            (acc, position) {
+              final driverId = position.driverNumber;
+              if (acc[driverId] == null ||
+                  acc[driverId]!.date.isAfter(position.date)) {
+                acc[driverId] = position;
+              }
+              return acc;
+            },
+          )
+          .values
+          .toList();
 
-        // ordena a lista de acordo com a posição
-        latestPositions.sort((a, b) => a.position.compareTo(b.position));
+      // ordena a lista de acordo com a posição
+      latestPositions.sort((a, b) => a.position.compareTo(b.position));
 
-        _latestPositions.value = latestPositions;
-        _firstpositions.value = firstPositions;
-      } on DomainError catch (error) {
-        log(error.toString(),
-            name: 'GetxRaceDashboardPresenter.getLatestPosition');
-      }
-    });
+      _latestPositions.value = latestPositions;
+      _firstpositions.value = firstPositions;
+    } on DomainError catch (error) {
+      log(error.toString(),
+          name: 'GetxRaceDashboardPresenter.getLatestPosition');
+    }
   }
 
   @override
   void onClose() {
-    _timer.cancel();
+    _timer1.cancel();
+    _timer2.cancel();
     super.onClose();
   }
 
   @override
   dispose() {
-    _timer.cancel();
+    _timer1.cancel();
+    _timer2.cancel();
     super.dispose();
+  }
+
+  @override
+  Future<void> getLatestInterval() async {
+    try {
+      final result = await loadIntervals.call(
+        meetingKey: _meeting.value?.meetingKey.toString() ?? 'latest',
+        sessionKey: 'latest',
+      );
+
+      final latestIntervals = result
+          .fold<Map<int, IntervalEntity>>(
+            {},
+            (acc, interval) {
+              final driverId = interval.driverNumber;
+              if (acc[driverId] == null ||
+                  acc[driverId]!.date.isBefore(interval.date)) {
+                acc[driverId] = interval;
+              }
+              return acc;
+            },
+          )
+          .values
+          .toList();
+
+      _intervals.value = latestIntervals;
+    } on DomainError catch (error) {
+      log(error.toString(),
+          name: 'GetxRaceDashboardPresenter.getLatestInterval');
+    }
+  }
+
+  @override
+  Future<void> startLiveUpdates() async {
+    _timer1 = Timer.periodic(const Duration(seconds: 5), (_) async {
+      await getLatestPosition();
+    });
+
+    _timer2 = Timer.periodic(const Duration(seconds: 5), (_) async {
+      await getLatestInterval();
+    });
   }
 }
