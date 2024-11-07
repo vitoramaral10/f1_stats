@@ -12,7 +12,7 @@ class HttpAdapter implements HttpClient {
 
   @override
   Future<dynamic> request({
-    required String url,
+    required Uri url,
     required HttpMethod method,
     Map? body,
     Map? headers,
@@ -30,19 +30,19 @@ class HttpAdapter implements HttpClient {
 
       switch (method) {
         case HttpMethod.post:
-          futureResponse = client.post(Uri.parse(url),
-              headers: defaultHeaders, body: jsonBody);
+          futureResponse =
+              client.post(url, headers: defaultHeaders, body: jsonBody);
           break;
         case HttpMethod.get:
-          futureResponse = client.get(Uri.parse(url), headers: defaultHeaders);
+          futureResponse = client.get(url, headers: defaultHeaders);
           break;
         case HttpMethod.put:
-          futureResponse = client.put(Uri.parse(url),
-              headers: defaultHeaders, body: jsonBody);
+          futureResponse =
+              client.put(url, headers: defaultHeaders, body: jsonBody);
           break;
         case HttpMethod.delete:
-          futureResponse = client.delete(Uri.parse(url),
-              headers: defaultHeaders, body: jsonBody);
+          futureResponse =
+              client.delete(url, headers: defaultHeaders, body: jsonBody);
           break;
         default:
           throw HttpError.methodNotAllowed;

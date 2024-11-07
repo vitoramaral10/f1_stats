@@ -1,9 +1,8 @@
 import 'dart:developer';
 
-import 'package:f1_stats/domain/entities/meeting_entity.dart';
-import 'package:f1_stats/domain/usecases/load_meetings.dart';
-
+import '../../../domain/entities/entities.dart';
 import '../../../domain/helpers/helpers.dart';
+import '../../../domain/usecases/usecases.dart';
 import '../../http/http.dart';
 import '../../models/models.dart';
 
@@ -15,14 +14,23 @@ class RemoteLoadMeetings implements LoadMeetings {
 
   @override
   Future<List<MeetingEntity>> call({
-    required int year,
+    int? year,
+    String? meetingKey,
   }) async {
     try {
+      Uri urlRequest = Uri(
+        scheme: 'https',
+        host: url,
+        path: '/v1/meetings',
+        queryParameters: {
+          if (year != null) 'year': year.toString(),
+          'meeting_key': meetingKey,
+        },
+      );
       final response = await httpClient.request(
-        url: '$url/meetings?year=$year',
+        url: urlRequest,
         method: HttpMethod.get,
       );
-
       return response
           .map<MeetingEntity>((json) => MeetingModel.fromJson(json).toEntity())
           .toList();

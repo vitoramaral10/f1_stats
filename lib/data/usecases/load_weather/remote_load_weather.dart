@@ -17,8 +17,17 @@ class RemoteLoadWeather implements LoadWeather {
     required int sessionKey,
   }) async {
     try {
+      Uri urlRequest = Uri(
+        scheme: 'https',
+        host: url,
+        path: '/v1/weather',
+        queryParameters: {
+          'session_key': sessionKey.toString(),
+        },
+      );
+
       final response = await httpClient.request(
-        url: '$url/weather?session_key=$sessionKey',
+        url: urlRequest,
         method: HttpMethod.get,
       );
 

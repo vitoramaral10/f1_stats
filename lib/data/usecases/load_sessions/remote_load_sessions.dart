@@ -1,9 +1,8 @@
 import 'dart:developer';
 
-import 'package:f1_stats/domain/entities/session_entity.dart';
-import 'package:f1_stats/domain/usecases/load_sessions.dart';
-
+import '../../../domain/entities/entities.dart';
 import '../../../domain/helpers/helpers.dart';
+import '../../../domain/usecases/usecases.dart';
 import '../../http/http.dart';
 import '../../models/models.dart';
 
@@ -18,8 +17,17 @@ class RemoteLoadSessions implements LoadSessions {
     required int meetingKey,
   }) async {
     try {
+      Uri urlRequest = Uri(
+        scheme: 'https',
+        host: url,
+        path: '/v1/sessions',
+        queryParameters: {
+          'meeting_key': meetingKey,
+        },
+      );
+
       final response = await httpClient.request(
-        url: '$url/sessions?meeting_key=$meetingKey',
+        url: urlRequest,
         method: HttpMethod.get,
       );
 

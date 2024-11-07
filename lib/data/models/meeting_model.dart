@@ -52,6 +52,7 @@ class MeetingModel {
   MeetingEntity toEntity() => MeetingEntity(
         meetingKey: meetingKey,
         meetingName: meetingName,
+        meetingOfficialName: meetingOfficialName,
         dateStart: dateStart,
         location: location,
       );

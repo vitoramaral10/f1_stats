@@ -9,7 +9,7 @@ class PublicHttpClientDecorator implements HttpClient {
 
   @override
   Future request({
-    required String url,
+    required Uri url,
     required HttpMethod method,
     Map? body,
     Map? headers,

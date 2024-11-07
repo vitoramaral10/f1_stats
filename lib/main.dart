@@ -19,13 +19,10 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'F1 Stats',
       darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.red,
-          // brightness: Brightness.dark,
-        ),
+        scaffoldBackgroundColor: const Color(0xFF15151E),
+        brightness: Brightness.dark,
         useMaterial3: true,
       ),
-      // themeMode: ThemeMode.dark,
       initialRoute: Routes.initial,
       getPages: Routes.pages,
     );

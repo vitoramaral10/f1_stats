@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'factories/factories.dart';
 
 class Routes {
-  static const String initial = '/';
+  static const String initial = '/race_dashboard';
 
   static List<GetPage> get pages => [
         GetPage(
@@ -15,6 +15,11 @@ class Routes {
           name: '/session',
           page: makeSessionPage,
           binding: makeSessionBinding(),
+        ),
+        GetPage(
+          name: '/race_dashboard',
+          page: makeRaceDashboardPage,
+          binding: makeRaceDashboardBinding(),
         )
       ];
 }

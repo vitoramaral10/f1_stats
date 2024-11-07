@@ -1,1 +1,1 @@
-String makeApiUrl() => 'https://api.openf1.org/v1';
+String makeApiUrl() => 'api.openf1.org';
