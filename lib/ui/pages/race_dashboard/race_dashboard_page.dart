@@ -36,18 +36,20 @@ class RaceDashboardPage extends GetView<GetxRaceDashboardPresenter> {
               );
             }
 
-            return Column(
-              children: [
-                Header(meeting: controller.meeting!),
-                Expanded(
-                    child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
-                  child: DriversList(
-                      drivers: controller.drivers,
-                      positions: controller.positions),
-                )),
-              ],
-            );
+            return Obx(() => Column(
+                  children: [
+                    Header(meeting: controller.meeting!),
+                    Expanded(
+                        child: SingleChildScrollView(
+                      padding: const EdgeInsets.all(16),
+                      child: DriversList(
+                        drivers: controller.drivers,
+                        latestPositions: controller.latestPositions,
+                        firstPositions: controller.firstPositions,
+                      ),
+                    )),
+                  ],
+                ));
           }),
     );
   }
@@ -90,12 +92,14 @@ class Header extends StatelessWidget {
 
 class DriversList extends StatelessWidget {
   final List<DriverEntity> drivers;
-  final List<PositionEntity> positions;
+  final List<PositionEntity> latestPositions;
+  final List<PositionEntity> firstPositions;
 
   const DriversList({
     super.key,
     required this.drivers,
-    required this.positions,
+    required this.latestPositions,
+    required this.firstPositions,
   });
 
   @override
@@ -118,6 +122,9 @@ class DriversList extends StatelessWidget {
       children: [
         TableRow(
           children: [
+            TableCell(
+              child: Text(''),
+            ),
             TableCell(
               child: Text(''),
             ),
@@ -150,11 +157,19 @@ class DriversList extends StatelessWidget {
             ),
           ],
         ),
-        ...positions.map(
+        ...latestPositions.map(
           (position) {
             final driver = drivers.firstWhere(
               (element) => element.driverNumber == position.driverNumber,
             );
+
+            final gainPosition = -((position.position -
+              firstPositions
+                .firstWhere(
+                  (element) =>
+                    element.driverNumber == position.driverNumber,
+                )
+                .position));
 
             return TableRow(
               children: [
@@ -171,6 +186,28 @@ class DriversList extends StatelessWidget {
                       const SizedBox(width: 8),
                       Text(
                         driver.nameAcronym,
+                      ),
+                    ],
+                  ),
+                ),
+                TableCell(
+                  child: Row(
+                    children: [
+                      Icon(
+                        (gainPosition > 0)
+                            ? Icons.arrow_circle_up
+                            : (gainPosition < 0)
+                                ? Icons.arrow_circle_down
+                                : Icons.arrow_right,
+                        color: gainPosition > 0
+                            ? Colors.green
+                            : (gainPosition < 0)
+                                ? Colors.red
+                                : Colors.white,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        gainPosition.toString(),
                       ),
                     ],
                   ),

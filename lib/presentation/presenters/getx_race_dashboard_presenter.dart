@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:get/get.dart';
@@ -22,14 +23,17 @@ class GetxRaceDashboardPresenter extends GetxController
 
   final _meeting = Rxn<MeetingEntity>();
   final _drivers = Rx<List<DriverEntity>>([]);
-  final _positions = Rx<List<PositionEntity>>([]);
+  final _latestPositions = Rx<List<PositionEntity>>([]);
+  final _firstpositions = Rx<List<PositionEntity>>([]);
 
   @override
   MeetingEntity? get meeting => _meeting.value;
   @override
   List<DriverEntity> get drivers => _drivers.value;
   @override
-  List<PositionEntity> get positions => _positions.value;
+  List<PositionEntity> get latestPositions => _latestPositions.value;
+  @override
+  List<PositionEntity> get firstPositions => _firstpositions.value;
 
   @override
   Future<void> loadLatestMeeting() async {
@@ -43,7 +47,13 @@ class GetxRaceDashboardPresenter extends GetxController
       _meeting.value = result.first;
 
       await getDrivers();
-      await getLatestPosition();
+
+      Timer.periodic(
+        const Duration(seconds: 5),
+        (_) async {
+          await getLatestPosition();
+        },
+      );
     } on DomainError catch (error) {
       log(error.toString(),
           name: 'GetxRaceDashboardPresenter.loadLatestMeeting');
@@ -78,7 +88,7 @@ class GetxRaceDashboardPresenter extends GetxController
         sessionKey: 'latest',
       );
 
-      // deixa somente a ultima posição de cada piloto com base no date
+      // deixa somente a primeira e a ultima posição de cada piloto com base no date
       final latestPositions = result
           .fold<Map<int, PositionEntity>>(
             {},
@@ -94,10 +104,26 @@ class GetxRaceDashboardPresenter extends GetxController
           .values
           .toList();
 
+      final firstPositions = result
+          .fold<Map<int, PositionEntity>>(
+            {},
+            (acc, position) {
+              final driverId = position.driverNumber;
+              if (acc[driverId] == null ||
+                  acc[driverId]!.date.isAfter(position.date)) {
+                acc[driverId] = position;
+              }
+              return acc;
+            },
+          )
+          .values
+          .toList();
+
       // ordena a lista de acordo com a posição
       latestPositions.sort((a, b) => a.position.compareTo(b.position));
 
-      _positions.value = latestPositions;
+      _latestPositions.value = latestPositions;
+      _firstpositions.value = firstPositions;
     } on DomainError catch (error) {
       log(error.toString(),
           name: 'GetxRaceDashboardPresenter.getLatestPosition');
