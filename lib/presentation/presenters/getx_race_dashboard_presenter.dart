@@ -49,19 +49,16 @@ class GetxRaceDashboardPresenter extends GetxController
       _meeting.value = result.first;
 
       await getDrivers();
-
-      Timer.periodic(
-        const Duration(seconds: 5),
-        (timer) async {
-          _timer.cancel();
-          await getLatestPosition();
-          _timer = timer;
-        },
-      );
     } on DomainError catch (error) {
       log(error.toString(),
           name: 'GetxRaceDashboardPresenter.loadLatestMeeting');
-      throw UiError.unexpected;
+
+      switch (error) {
+        case DomainError.tooManyRequests:
+          throw UiError.tooManyRequests;
+        default:
+          throw UiError.unexpected;
+      }
     }
   }
 
@@ -78,66 +75,72 @@ class GetxRaceDashboardPresenter extends GetxController
 
       _drivers.value = result;
     } on DomainError catch (error) {
-      log(error.toString(),
-          name: 'GetxRaceDashboardPresenter.loadLatestMeeting');
+      log(error.toString(), name: 'GetxRaceDashboardPresenter.getDrivers');
       throw UiError.unexpected;
     }
   }
 
   @override
   Future<void> getLatestPosition() async {
-    try {
-      final result = await loadPositions.call(
-        meetingKey: _meeting.value?.meetingKey.toString() ?? 'latest',
-        sessionKey: 'latest',
-      );
+    _timer = Timer.periodic(const Duration(seconds: 5), (_) async {
+      try {
+        final result = await loadPositions.call(
+          meetingKey: _meeting.value?.meetingKey.toString() ?? 'latest',
+          sessionKey: 'latest',
+        );
 
-      // deixa somente a primeira e a ultima posição de cada piloto com base no date
-      final latestPositions = result
-          .fold<Map<int, PositionEntity>>(
-            {},
-            (acc, position) {
-              final driverId = position.driverNumber;
-              if (acc[driverId] == null ||
-                  acc[driverId]!.date.isBefore(position.date)) {
-                acc[driverId] = position;
-              }
-              return acc;
-            },
-          )
-          .values
-          .toList();
+        // deixa somente a primeira e a ultima posição de cada piloto com base no date
+        final latestPositions = result
+            .fold<Map<int, PositionEntity>>(
+              {},
+              (acc, position) {
+                final driverId = position.driverNumber;
+                if (acc[driverId] == null ||
+                    acc[driverId]!.date.isBefore(position.date)) {
+                  acc[driverId] = position;
+                }
+                return acc;
+              },
+            )
+            .values
+            .toList();
 
-      final firstPositions = result
-          .fold<Map<int, PositionEntity>>(
-            {},
-            (acc, position) {
-              final driverId = position.driverNumber;
-              if (acc[driverId] == null ||
-                  acc[driverId]!.date.isAfter(position.date)) {
-                acc[driverId] = position;
-              }
-              return acc;
-            },
-          )
-          .values
-          .toList();
+        final firstPositions = result
+            .fold<Map<int, PositionEntity>>(
+              {},
+              (acc, position) {
+                final driverId = position.driverNumber;
+                if (acc[driverId] == null ||
+                    acc[driverId]!.date.isAfter(position.date)) {
+                  acc[driverId] = position;
+                }
+                return acc;
+              },
+            )
+            .values
+            .toList();
 
-      // ordena a lista de acordo com a posição
-      latestPositions.sort((a, b) => a.position.compareTo(b.position));
+        // ordena a lista de acordo com a posição
+        latestPositions.sort((a, b) => a.position.compareTo(b.position));
 
-      _latestPositions.value = latestPositions;
-      _firstpositions.value = firstPositions;
-    } on DomainError catch (error) {
-      log(error.toString(),
-          name: 'GetxRaceDashboardPresenter.getLatestPosition');
-      rethrow;
-    }
+        _latestPositions.value = latestPositions;
+        _firstpositions.value = firstPositions;
+      } on DomainError catch (error) {
+        log(error.toString(),
+            name: 'GetxRaceDashboardPresenter.getLatestPosition');
+      }
+    });
   }
 
   @override
   void onClose() {
     _timer.cancel();
     super.onClose();
+  }
+
+  @override
+  dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 }

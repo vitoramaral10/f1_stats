@@ -1,3 +1,3 @@
 enum DomainError {
-  unexpected, notFound,
+  unexpected, notFound, tooManyRequests,
 }

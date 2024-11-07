@@ -11,6 +11,30 @@ class RaceDashboardPage extends GetView<GetxRaceDashboardPresenter> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Obx(
+          () => Row(
+            children: [
+              Text(
+                controller.meeting?.meetingOfficialName ?? '',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Spacer(),
+              Text(
+                'LAP 54/70',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
       backgroundColor: Colors.black,
       body: FutureBuilder(
           future: controller.loadLatestMeeting(),
@@ -36,56 +60,54 @@ class RaceDashboardPage extends GetView<GetxRaceDashboardPresenter> {
               );
             }
 
-            return Obx(() => Column(
-                  children: [
-                    Header(meeting: controller.meeting!),
-                    Expanded(
-                        child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(16),
-                      child: DriversList(
-                        drivers: controller.drivers,
-                        latestPositions: controller.latestPositions,
-                        firstPositions: controller.firstPositions,
-                      ),
-                    )),
-                  ],
-                ));
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: FutureBuilder(
+                  future: controller.getLatestPosition(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (snapshot.hasError) {
+                      if (snapshot.error is UiError) {
+                        return Center(
+                          child: Column(
+                            children: [
+                              Text((snapshot.error! as UiError).description),
+                              SizedBox(height: 16),
+                              ElevatedButton(
+                                onPressed: () async {
+                                  try {
+                                    await controller.getLatestPosition();
+                                  } catch (e) {
+                                    // ignore: avoid_print
+                                  }
+                                },
+                                child: const Text('Tentar novamente'),
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        return const Center(
+                          child: Text('Erro inesperado'),
+                        );
+                      }
+                    }
+
+                    if (controller.meeting == null) {
+                      return const Center(
+                        child: Text('No meeting found'),
+                      );
+                    }
+                    return Obx(() => DriversList(
+                          drivers: controller.drivers,
+                          latestPositions: controller.latestPositions,
+                          firstPositions: controller.firstPositions,
+                        ));
+                  }),
+            );
           }),
-    );
-  }
-}
-
-class Header extends StatelessWidget {
-  final MeetingEntity meeting;
-  const Header({
-    super.key,
-    required this.meeting,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(16.0),
-      child: Row(
-        children: [
-          Text(
-            meeting.meetingOfficialName,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Spacer(),
-          Text(
-            'LAP 54/70',
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 16,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

@@ -36,7 +36,13 @@ class RemoteLoadMeetings implements LoadMeetings {
           .toList();
     } on HttpError catch (error) {
       log(error.toString(), name: 'RemoteLoadMeetings.call');
-      throw DomainError.unexpected;
+
+      switch (error) {
+        case HttpError.tooManyRequests:
+          throw DomainError.tooManyRequests;
+        default:
+          throw DomainError.unexpected;
+      }
     }
   }
 }

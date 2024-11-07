@@ -37,7 +37,13 @@ class RemoteLoadPositions implements LoadPositions {
           .toList();
     } on HttpError catch (error) {
       log(error.toString(), name: 'RemoteLoadPositions.call');
-      throw DomainError.unexpected;
+
+      switch (error) {
+        case HttpError.tooManyRequests:
+          throw DomainError.tooManyRequests;
+        default:
+          throw DomainError.unexpected;
+      }
     }
   }
 }
