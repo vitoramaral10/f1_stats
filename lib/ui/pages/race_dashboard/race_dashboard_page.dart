@@ -106,54 +106,64 @@ class DriversList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Table(
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      border: TableBorder(
+        verticalInside: BorderSide(
+          color: Colors.grey,
+          width: 1,
+        ),
+        bottom: BorderSide(
+          color: Colors.grey,
+          width: 1,
+        ),
+      ),
       columnWidths: const {
-        0: FixedColumnWidth(24),
-        1: FixedColumnWidth(72),
-        2: FixedColumnWidth(64),
-        3: FixedColumnWidth(72),
-        4: FixedColumnWidth(72),
-        5: FixedColumnWidth(72),
-        6: FixedColumnWidth(48),
+        0: FixedColumnWidth(32),
+        1: FixedColumnWidth(80),
+        2: FixedColumnWidth(72),
+        3: FixedColumnWidth(80),
+        4: FixedColumnWidth(80),
+        5: FixedColumnWidth(80),
+        6: FixedColumnWidth(64),
         7: FlexColumnWidth(),
-        8: FixedColumnWidth(72),
-        9: FixedColumnWidth(72),
-        10: FixedColumnWidth(72),
+        8: FixedColumnWidth(80),
+        9: FixedColumnWidth(80),
+        10: FixedColumnWidth(80),
       },
       children: [
         TableRow(
           children: [
             TableCell(
-              child: Text(''),
+              child: Center(child: Text('')),
             ),
             TableCell(
-              child: Text(''),
+              child: Center(child: Text('')),
             ),
             TableCell(
-              child: Text(''),
+              child: Center(child: Text('')),
             ),
             TableCell(
-              child: Text('GAP'),
+              child: Center(child: Text('GAP')),
             ),
             TableCell(
-              child: Text('INTERVAL'),
+              child: Center(child: Text('INTERVAL')),
             ),
             TableCell(
-              child: Text('LAST LAP'),
+              child: Center(child: Text('LAST LAP')),
             ),
             TableCell(
-              child: Text(''),
+              child: Center(child: Text('')),
             ),
             TableCell(
-              child: Text(''),
+              child: Center(child: Text('')),
             ),
             TableCell(
-              child: Text('1'),
+              child: Center(child: Text('1')),
             ),
             TableCell(
-              child: Text('2'),
+              child: Center(child: Text('2')),
             ),
             TableCell(
-              child: Text('3'),
+              child: Center(child: Text('3')),
             ),
           ],
         ),
@@ -174,98 +184,123 @@ class DriversList extends StatelessWidget {
             return TableRow(
               children: [
                 TableCell(
-                  child: Text(
-                    position.position.toString(),
+                  child: Center(
+                    child: Text(
+                      position.position.toString(),
+                    ),
                   ),
                 ),
                 TableCell(
-                  child: Row(
-                    children: [
-                      // Icone da Equipe (Placeholder)
-                      const Icon(Icons.circle, color: Colors.orange, size: 16),
-                      const SizedBox(width: 8),
-                      Text(
-                        driver.nameAcronym,
-                      ),
-                    ],
+                  child: Center(
+                    child: Row(
+                      children: [
+                        SizedBox(width: 8),
+                        const Icon(Icons.circle,
+                            color: Colors.orange, size: 16),
+                        const SizedBox(width: 8),
+                        Text(
+                          driver.nameAcronym,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 TableCell(
-                  child: Row(
-                    children: [
-                      if (gainPosition > 0)
-                        Transform.rotate(
-                            angle: 1.5708,
-                            child: Icon(Icons.arrow_back_ios_new,
-                                color: Colors.green))
-                      else
-                        (gainPosition < 0)
-                            ? Transform.rotate(
-                                angle: 4.71239,
-                                child: Icon(Icons.arrow_back_ios_new,
-                                    color: Colors.red))
-                            : Icon(Icons.remove),
-                      const SizedBox(width: 8),
-                      Text(
-                        gainPosition.toString(),
-                      ),
-                    ],
+                  child: Center(
+                    child: Row(
+                      children: [
+                        SizedBox(width: 8),
+                        if (gainPosition > 0)
+                          Transform.rotate(
+                              angle: 1.5708,
+                              child: Icon(Icons.arrow_back_ios_new,
+                                  color: Colors.green))
+                        else
+                          (gainPosition < 0)
+                              ? Transform.rotate(
+                                  angle: 4.71239,
+                                  child: Icon(Icons.arrow_back_ios_new,
+                                      color: Colors.red))
+                              : Icon(Icons.remove),
+                        const SizedBox(width: 8),
+                        Text(
+                          gainPosition.toString(),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 TableCell(
-                  child: Text(
-                    'LEADER',
+                  child: Center(
+                    child: Text(
+                      'LEADER',
+                    ),
                   ),
                 ),
                 TableCell(
-                  child: Text(
-                    '+0.000',
+                  child: Center(
+                    child: Text(
+                      '+0.000',
+                    ),
                   ),
                 ),
                 TableCell(
-                  child: Text(
-                    '1:12.000',
+                  child: Center(
+                    child: Text(
+                      '1:12.000',
+                    ),
                   ),
                 ),
                 TableCell(
                   child: Container(
                     padding: const EdgeInsets.all(4),
+                    margin: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       // color: Colors.green,
                       borderRadius: BorderRadius.circular(4),
                       border: Border.all(color: Colors.green, width: 2),
                     ),
                     child: Center(
-                      child: Text(
-                        'DRS',
-                        style: const TextStyle(
-                            color: Colors.green, fontWeight: FontWeight.bold),
+                      child: Center(
+                        child: Text(
+                          'DRS',
+                          style: const TextStyle(
+                              color: Colors.green, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),
                 ),
                 TableCell(
-                  child: Text(
-                    'PIT',
-                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  child: Center(
+                    child: Text(
+                      'PIT',
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
+                    ),
                   ),
                 ),
                 TableCell(
-                  child: Text(
-                    '26.966',
-                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  child: Center(
+                    child: Text(
+                      '26.966',
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
+                    ),
                   ),
                 ),
                 TableCell(
-                  child: Text(
-                    '26.966',
-                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  child: Center(
+                    child: Text(
+                      '26.966',
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
+                    ),
                   ),
                 ),
                 TableCell(
-                  child: Text(
-                    '26.966',
-                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  child: Center(
+                    child: Text(
+                      '26.966',
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
+                    ),
                   ),
                 ),
               ],
