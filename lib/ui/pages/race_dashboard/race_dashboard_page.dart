@@ -108,16 +108,16 @@ class DriversList extends StatelessWidget {
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
       columnWidths: const {
         0: FixedColumnWidth(24),
-        1: FlexColumnWidth(1),
-        2: FlexColumnWidth(1),
-        3: FlexColumnWidth(1),
-        4: FlexColumnWidth(1),
-        5: FixedColumnWidth(48),
-        6: FlexColumnWidth(0.5),
-        7: FlexColumnWidth(0.5),
-        8: FlexColumnWidth(0.5),
-        9: FlexColumnWidth(0.5),
-        10: FlexColumnWidth(0.5),
+        1: FixedColumnWidth(72),
+        2: FixedColumnWidth(64),
+        3: FixedColumnWidth(72),
+        4: FixedColumnWidth(72),
+        5: FixedColumnWidth(72),
+        6: FixedColumnWidth(48),
+        7: FlexColumnWidth(),
+        8: FixedColumnWidth(72),
+        9: FixedColumnWidth(72),
+        10: FixedColumnWidth(72),
       },
       children: [
         TableRow(
@@ -164,12 +164,12 @@ class DriversList extends StatelessWidget {
             );
 
             final gainPosition = -((position.position -
-              firstPositions
-                .firstWhere(
-                  (element) =>
-                    element.driverNumber == position.driverNumber,
-                )
-                .position));
+                firstPositions
+                    .firstWhere(
+                      (element) =>
+                          element.driverNumber == position.driverNumber,
+                    )
+                    .position));
 
             return TableRow(
               children: [
@@ -193,18 +193,18 @@ class DriversList extends StatelessWidget {
                 TableCell(
                   child: Row(
                     children: [
-                      Icon(
-                        (gainPosition > 0)
-                            ? Icons.arrow_circle_up
-                            : (gainPosition < 0)
-                                ? Icons.arrow_circle_down
-                                : Icons.arrow_right,
-                        color: gainPosition > 0
-                            ? Colors.green
-                            : (gainPosition < 0)
-                                ? Colors.red
-                                : Colors.white,
-                      ),
+                      if (gainPosition > 0)
+                        Transform.rotate(
+                            angle: 1.5708,
+                            child: Icon(Icons.arrow_back_ios_new,
+                                color: Colors.green))
+                      else
+                        (gainPosition < 0)
+                            ? Transform.rotate(
+                                angle: 4.71239,
+                                child: Icon(Icons.arrow_back_ios_new,
+                                    color: Colors.red))
+                            : Icon(Icons.remove),
                       const SizedBox(width: 8),
                       Text(
                         gainPosition.toString(),
