@@ -5,21 +5,28 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "f1_stats",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "f1_stats (profile mode)",
+            "name": "F1 Stats (Debug)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "args": [
+                "--debug"
+            ]
         },
         {
-            "name": "f1_stats (release mode)",
+            "name": "F1 Stats (Profile)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "args": [
+                "--profile"
+            ]
+        },
+        {
+            "name": "F1 Stats (Release)",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--release"
+            ]
         }
     ]
 }
