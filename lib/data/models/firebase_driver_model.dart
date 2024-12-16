@@ -8,6 +8,7 @@ class FirebaseDriverModel {
   final String? headshotUrl;
   final String? countryCode;
   final String? team;
+  final List<int> seasons;
 
   FirebaseDriverModel({
     required this.id,
@@ -17,6 +18,7 @@ class FirebaseDriverModel {
     required this.headshotUrl,
     required this.countryCode,
     required this.team,
+    required this.seasons,
   });
 
   factory FirebaseDriverModel.fromJson(Map json) => FirebaseDriverModel(
@@ -27,6 +29,7 @@ class FirebaseDriverModel {
         headshotUrl: json['headshotUrl'],
         countryCode: json['countryCode'],
         team: json['team'],
+        seasons: List<int>.from(json['seasons'] ?? []),
       );
 
   DriverEntity toEntity() => DriverEntity(
@@ -36,5 +39,7 @@ class FirebaseDriverModel {
         nameAcronym: nameAcronym,
         headshotUrl: headshotUrl,
         countryCode: countryCode,
+        team: team,
+        seasons: seasons,
       );
 }

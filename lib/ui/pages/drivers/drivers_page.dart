@@ -81,7 +81,7 @@ class DriversPage extends GetView<GetxDriversController>
                       ),
                     ),
                     title: Text(driver.fullName),
-                    subtitle: Text('aqui vai o time'),
+                    subtitle: Text(driver.seasons.toString()),
                     selectedTileColor: Colors.grey[200],
                   );
                 },

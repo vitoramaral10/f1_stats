@@ -9,6 +9,7 @@ class VertexAiDriverModel {
   final String headshotUrl;
   final String nameAcronym;
   final String team;
+  final List<int> seasons;
 
   VertexAiDriverModel({
     required this.driverNumber,
@@ -17,6 +18,7 @@ class VertexAiDriverModel {
     required this.headshotUrl,
     required this.nameAcronym,
     required this.team,
+    required this.seasons,
   });
 
   factory VertexAiDriverModel.fromJson(Map json) => VertexAiDriverModel(
@@ -26,6 +28,7 @@ class VertexAiDriverModel {
         headshotUrl: json['headshotUrl'],
         nameAcronym: json['nameAcronym'],
         team: json['team'],
+        seasons: List<int>.from(json['seasons']),
       );
 
   DriverEntity toEntity() => DriverEntity(
@@ -35,6 +38,7 @@ class VertexAiDriverModel {
         headshotUrl: headshotUrl,
         nameAcronym: nameAcronym,
         team: team,
+        seasons: seasons,
       );
 
   static Schema schema = Schema.object(properties: {
@@ -44,5 +48,6 @@ class VertexAiDriverModel {
     'headshotUrl': Schema.string(),
     'nameAcronym': Schema.string(),
     'team': Schema.string(),
+    'seasons': Schema.array(items: Schema.integer()),
   });
 }

@@ -6,6 +6,7 @@ class DriverEntity {
   final String? headshotUrl;
   final String? countryCode;
   final String? team;
+  final List<int> seasons;
 
   DriverEntity({
     this.id,
@@ -15,6 +16,7 @@ class DriverEntity {
     this.headshotUrl,
     this.countryCode,
     this.team,
+    required this.seasons,
   });
 
   Map<String, dynamic> toJson() => {
@@ -24,5 +26,6 @@ class DriverEntity {
         'headshotUrl': headshotUrl,
         'countryCode': countryCode,
         'team': team,
+        'seasons': seasons,
       };
 }

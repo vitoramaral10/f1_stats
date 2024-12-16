@@ -46,10 +46,26 @@ class GetxDriversController extends GetxController
   @override
   Future<void> loadDrivers() async {
     try {
-      _drivers.value = await firebaseLoadDrivers.call();
+      final drivers = await firebaseLoadDrivers.call();
 
-      _drivers.sort((a, b) =>
-          a.fullName.toLowerCase().compareTo(b.fullName.toLowerCase()));
+      final currentYear = DateTime.now().year;
+      final currentYearDrivers = drivers
+          .where((driver) => driver.seasons.contains(currentYear))
+          .toList();
+
+      currentYearDrivers.sort((a, b) => a.fullName.compareTo(b.fullName));
+
+      final filteredOtherDrivers = drivers
+          .where((driver) => !driver.seasons.contains(currentYear))
+          .toList();
+
+      filteredOtherDrivers.sort((a, b) => a.fullName.compareTo(b.fullName));
+
+      _drivers.clear();
+
+      _drivers.addAll(currentYearDrivers);
+      _drivers.addAll(filteredOtherDrivers);
+
     } on Exception catch (e) {
       log(e.toString(), name: 'GetxDriversController.loadDrivers');
       mainError = UiError.unexpected;

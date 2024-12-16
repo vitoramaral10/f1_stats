@@ -50,6 +50,6 @@ class Openf1DriverModel {
         nameAcronym: nameAcronym,
         headshotUrl: headshotUrl,
         countryCode: countryCode,
-        
+        seasons: [],
       );
 }
