@@ -10,6 +10,8 @@ class _DriversBindings implements Bindings {
   void dependencies() {
     Get.put(GetxDriversController(
       openf1LoadDrivers: makeOpenF1LoadDrivers(),
+      firebaseLoadDrivers: makeFirebaseLoadDrivers(),
+      firebaseSaveDriver: makeFirebaseSaveDriver(),
     ));
   }
 }

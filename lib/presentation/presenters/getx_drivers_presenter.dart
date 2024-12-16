@@ -13,9 +13,13 @@ class GetxDriversController extends GetxController
     with LoadingManager, UIErrorManager
     implements DriversPresenter {
   final LoadDrivers openf1LoadDrivers;
+  final LoadDrivers firebaseLoadDrivers;
+  final SaveDriver firebaseSaveDriver;
 
   GetxDriversController({
     required this.openf1LoadDrivers,
+    required this.firebaseLoadDrivers,
+    required this.firebaseSaveDriver,
   });
 
   final _drivers = <DriverEntity>[].obs;
@@ -24,17 +28,29 @@ class GetxDriversController extends GetxController
   List<DriverEntity> get drivers => _drivers;
 
   @override
+  Future<void> onInit() async {
+    super.onInit();
+    _drivers.value = await firebaseLoadDrivers.call();
+
+    _drivers.sort(
+        (a, b) => a.fullName.toLowerCase().compareTo(b.fullName.toLowerCase()));
+  }
+
+  @override
   Future<void> importDrivers() async {
     try {
       isLoading = true;
 
-      List<DriverEntity> drivers = await openf1LoadDrivers.call();
+      List<DriverEntity> driversOpenf1 = await openf1LoadDrivers.call();
 
-      drivers = drivers.toSet().toList();
+      for (var driver in driversOpenf1) {
+        await firebaseSaveDriver.call(driver);
+      }
 
-      drivers.sort((a, b) => a.fullName.compareTo(b.fullName));
+      _drivers.value = await firebaseLoadDrivers.call();
 
-      _drivers.assignAll(drivers);
+      _drivers.sort((a, b) =>
+          a.fullName.toLowerCase().compareTo(b.fullName.toLowerCase()));
 
       isLoading = false;
     } on DomainError catch (error) {

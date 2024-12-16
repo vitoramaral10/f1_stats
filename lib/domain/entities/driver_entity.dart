@@ -15,15 +15,12 @@ class DriverEntity {
     this.team,
   });
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        other is DriverEntity &&
-            runtimeType == other.runtimeType &&
-            fullName == other.fullName;
-  }
-  
-  @override
-  int get hashCode => fullName.hashCode;
-  
+  Map<String, dynamic> toJson() => {
+        'driverNumber': driverNumber,
+        'fullName': fullName,
+        'nameAcronym': nameAcronym,
+        'headshotUrl': headshotUrl,
+        'countryCode': countryCode,
+        'team': team,
+      };
 }

@@ -6,3 +6,7 @@ LoadDrivers makeOpenF1LoadDrivers() => Openf1LoadDrivers(
       httpClient: makeHttpAdapter(),
       url: makeopenf1ApiUrl('drivers'),
     );
+
+LoadDrivers makeFirebaseLoadDrivers() => FirebaseLoadDrivers(
+      firebase: makeFirebaseAdapter(),
+    );
