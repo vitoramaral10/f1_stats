@@ -71,7 +71,7 @@ class DriversPage extends GetView<GetxDriversController>
                       if (controller.driversSelected.isNotEmpty) {
                         controller.selectDriver(driver);
                       } else {
-                        Get.toNamed('/driver', arguments: driver);
+                        Get.toNamed('/drivers/${driver.id}');
                       }
                     },
                     leading: CircleAvatar(

@@ -15,5 +15,10 @@ class Routes {
       page: makeDriversPage,
       binding: makeGetxDriversBindings(),
     ),
+    GetPage(
+      name: '/drivers/:driverId',
+      page: makeDriverDetailsPage,
+      binding: makeGetxDriverDetailsBindings(),
+    ),
   ];
 }
