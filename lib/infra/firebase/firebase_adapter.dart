@@ -42,7 +42,11 @@ class FirebaseAdapter implements FirebaseClient {
       final db = FirebaseFirestore.instance;
 
       return db.collection(path).get().then((value) {
-        return value.docs.map((e) => e.data()).toList();
+        return value.docs.map((e) {
+          final data = e.data();
+          data['id'] = e.id;
+          return data;
+        }).toList();
       });
     } catch (error) {
       throw FirebaseError.unexpected;

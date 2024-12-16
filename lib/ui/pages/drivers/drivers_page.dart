@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../presentation/presenters/presenters.dart';
-import '../../helpers/helpers.dart';
 import '../../mixins/mixins.dart';
 
 class DriversPage extends GetView<GetxDriversController>
-    with LoadingManager, UIErrorManager {
+    with LoadingManager, UIErrorManager, MergeDriversManager {
   const DriversPage({super.key});
 
   @override
@@ -16,33 +15,65 @@ class DriversPage extends GetView<GetxDriversController>
         handleLoading(context, controller.isLoadingStream);
         handleMainError(context, controller.mainErrorStream);
 
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('Drivers'),
-            actions: [
-              // Import icon button
-              IconButton(
-                icon: const Icon(Icons.download),
-                onPressed: () async {
-                  try {
-                    await controller.importDrivers();
-                  } on UiError catch (e) {
-                    Get.snackbar(
-                      'Error',
-                      e.description,
-                      backgroundColor: Colors.red,
-                    );
-                  }
-                },
+        return Obx(
+          () => Scaffold(
+              appBar: AppBar(
+                title: Text('Drivers'),
+                actions: [
+                  if (controller.driversSelected.isNotEmpty)
+                    IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        controller.deleteSelectedDrivers();
+                      },
+                    ),
+                  if (controller.driversSelected.isNotEmpty)
+                    IconButton(
+                      icon: const Icon(Icons.deselect),
+                      onPressed: () {
+                        controller.driversSelected.clear();
+                      },
+                    ),
+                  if (controller.driversSelected.isNotEmpty)
+                    IconButton(
+                      icon: const Icon(Icons.merge),
+                      onPressed: () {
+                        // Open merge dialog
+                        final driversSelected = controller.driversSelected
+                            .map((id) => controller.drivers
+                                .firstWhere((driver) => driver.id == id))
+                            .toList();
+
+                        openMergeDrivers(context, driversSelected);
+                      },
+                    ),
+                  // Import icon button
+                  IconButton(
+                    icon: const Icon(Icons.download),
+                    onPressed: () async {
+                      await controller.importDrivers();
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
-          body: Obx(() => ListView.builder(
+              body: ListView.builder(
                 itemCount: controller.drivers.length,
                 itemBuilder: (context, index) {
                   final driver = controller.drivers[index];
 
                   return ListTile(
+                    selected: controller.driversSelected.contains(driver.id),
+                    key: Key(driver.id ?? ''),
+                    onLongPress: () {
+                      controller.selectDriver(driver);
+                    },
+                    onTap: () {
+                      if (controller.driversSelected.isNotEmpty) {
+                        controller.selectDriver(driver);
+                      } else {
+                        Get.toNamed('/driver', arguments: driver);
+                      }
+                    },
                     leading: CircleAvatar(
                       backgroundImage: NetworkImage(
                         driver.headshotUrl ??
@@ -51,6 +82,7 @@ class DriversPage extends GetView<GetxDriversController>
                     ),
                     title: Text(driver.fullName),
                     subtitle: Text('aqui vai o time'),
+                    selectedTileColor: Colors.grey[200],
                   );
                 },
               )),

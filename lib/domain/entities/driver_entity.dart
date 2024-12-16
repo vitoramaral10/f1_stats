@@ -1,4 +1,5 @@
 class DriverEntity {
+  final String? id;
   final int driverNumber;
   final String fullName;
   final String nameAcronym;
@@ -7,6 +8,7 @@ class DriverEntity {
   final String? team;
 
   DriverEntity({
+    this.id,
     required this.driverNumber,
     required this.fullName,
     required this.nameAcronym,

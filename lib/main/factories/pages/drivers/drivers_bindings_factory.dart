@@ -12,6 +12,9 @@ class _DriversBindings implements Bindings {
       openf1LoadDrivers: makeOpenF1LoadDrivers(),
       firebaseLoadDrivers: makeFirebaseLoadDrivers(),
       firebaseSaveDriver: makeFirebaseSaveDriver(),
+      firebaseUpdateDriver: makeFirebaseUpdateDriver(),
+      firebaseRemoveDriver: makeFirebaseRemoveDriver(),
+      vertexAiMergeDrivers: makeVertexAiMergeDrivers(),
     ));
   }
 }

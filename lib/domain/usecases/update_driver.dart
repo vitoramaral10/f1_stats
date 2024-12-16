@@ -1,5 +1,5 @@
 import '../entities/entities.dart';
 
-abstract class SaveDriver {
+abstract class UpdateDriver {
   Future<void> call(DriverEntity driver);
 }
