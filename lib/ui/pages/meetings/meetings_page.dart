@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../main/routes.dart';
+import '../../../presentation/presenters/presenters.dart';
 
-class MeetingsPage extends StatelessWidget {
+class MeetingsPage extends GetView<GetxMeetingsPresenter> {
   const MeetingsPage({super.key});
 
   @override
@@ -23,7 +24,7 @@ class MeetingsPage extends StatelessWidget {
           ),
           Expanded(
               child: ListView.builder(
-            itemCount: DateTime.now().year - 2023,
+            itemCount: controller.meetings.length,
             itemBuilder: (context, index) {
               return ListTile(
                 title: Text('Temporada ${2023 + index}'),

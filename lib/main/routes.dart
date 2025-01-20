@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../ui/pages/pages.dart';
+import 'factories/factories.dart';
 
 class Routes {
   static const initial = '/';
@@ -15,6 +16,7 @@ class Routes {
     GetPage(
       name: '$meetings/:year',
       page: () => MeetingsPage(),
+      binding: makeMeetingsBindings(),
     ),
     // GetPage(
     //   name: meeting,
