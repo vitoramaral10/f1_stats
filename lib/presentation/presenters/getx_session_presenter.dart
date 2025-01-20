@@ -41,7 +41,7 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
     getRaceControl();
     getWeather();
 
-    _raceControlTimer = Timer.periodic(Duration(seconds: 30), (timer) {
+    _raceControlTimer = Timer.periodic(Duration(seconds: 5), (timer) {
       getRaceControl();
     });
 
@@ -53,10 +53,10 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
   @override
   Future<void> getRaceControl() async {
     try {
-      _raceControl.clear();
+      var result = await loadRaceControl.call(sessionKey: session.sessionKey);
 
-      _raceControl.value =
-          await loadRaceControl.call(sessionKey: session.sessionKey);
+      result.sort((a, b) => b.date.compareTo(a.date));
+      _raceControl.value = result;
     } on DomainError catch (error) {
       log(error.toString(), name: 'GetxSessionPresenter.getRaceControl');
       Get.snackbar(
@@ -71,8 +71,6 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
   @override
   Future<void> getWeather() async {
     try {
-      _weather.clear();
-
       _weather.value = await loadWeather.call(sessionKey: session.sessionKey);
     } on DomainError catch (error) {
       log(error.toString(), name: 'GetxSessionPresenter.getRaceControl');

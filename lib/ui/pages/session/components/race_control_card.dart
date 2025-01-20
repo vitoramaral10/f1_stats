@@ -20,8 +20,9 @@ class RaceControlCard extends StatelessWidget {
             style: Theme.of(context).textTheme.titleMedium,
           ),
           Divider(),
-          SizedBox(
+          Container(
             height: 200,
+            padding: EdgeInsets.all(16),
             child: Obx(
               () => ListView.builder(
                 itemCount: raceControl.length,

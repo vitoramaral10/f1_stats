@@ -1,11 +1,11 @@
 class WeatherEntity {
-  final double airTemperature;
   final DateTime date;
-  final double humidity;
   final int meetingKey;
+  final int sessionKey;
+  final double airTemperature;
+  final double humidity;
   final double pressure;
   final double rainfall;
-  final int sessionKey;
   final double trackTemperature;
   final int windDirection;
   final double windSpeed;
