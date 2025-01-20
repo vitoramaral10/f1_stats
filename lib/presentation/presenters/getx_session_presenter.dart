@@ -18,6 +18,9 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
     required this.loadWeather,
   });
 
+  Timer _weatherTimer = Timer(Duration(minutes: 1), () {});
+  Timer _raceControlTimer = Timer(Duration(seconds: 1), () {});
+
   final _session = Rx<SessionEntity>(SessionEntity.empty());
   final _raceControl = RxList<RaceControlEntity>([]);
   final _weather = RxList<WeatherEntity>([]);
@@ -35,10 +38,16 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
 
     _session.value = Get.arguments['session'];
 
-    // Timer.periodic(Duration(seconds: 10), (timer) {
     getRaceControl();
     getWeather();
-    // });
+
+    _raceControlTimer = Timer.periodic(Duration(seconds: 30), (timer) {
+      getRaceControl();
+    });
+
+    _weatherTimer = Timer.periodic(Duration(minutes: 1), (timer) {
+      getWeather();
+    });
   }
 
   @override
@@ -74,5 +83,12 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
         colorText: Colors.white,
       );
     }
+  }
+
+  @override
+  void onClose() {
+    _raceControlTimer.cancel();
+    _weatherTimer.cancel();
+    super.onClose();
   }
 }
