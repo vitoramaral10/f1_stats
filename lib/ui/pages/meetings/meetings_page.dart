@@ -1,5 +1,7 @@
+import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../main/routes.dart';
 import '../../../presentation/presenters/presenters.dart';
@@ -23,18 +25,30 @@ class MeetingsPage extends GetView<GetxMeetingsPresenter> {
             ),
           ),
           Expanded(
-              child: ListView.builder(
-            itemCount: controller.meetings.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text('Temporada ${2023 + index}'),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  Get.toNamed('${Routes.meetings}/${2023 + index}');
+            child: Obx(
+              () => ListView.builder(
+                itemCount: controller.meetings.length,
+                itemBuilder: (context, index) {
+                  final meeting = controller.meetings[index];
+                  return ListTile(
+                    leading: CountryFlag.fromCountryCode(
+                      meeting.countryCode,
+                      width: 32,
+                      height: 18,
+                    ),
+                    title: Text(meeting.meetingName),
+                    subtitle: Text(
+                      '${meeting.location} - ${DateFormat.yMMMd().add_jm().format(meeting.dateStart)}',
+                    ),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      Get.toNamed('${Routes.sessions}/${meeting.meetingKey}');
+                    },
+                  );
                 },
-              );
-            },
-          )),
+              ),
+            ),
+          ),
         ],
       ),
     );

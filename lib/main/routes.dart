@@ -6,7 +6,7 @@ import 'factories/factories.dart';
 class Routes {
   static const initial = '/';
   static const meetings = '/meetings';
-  static const meeting = '/meeting';
+  static const sessions = '/sessions';
 
   static List<GetPage> pages = [
     GetPage(
@@ -19,8 +19,8 @@ class Routes {
       binding: makeMeetingsBindings(),
     ),
     // GetPage(
-    //   name: meeting,
-    //   page: () => MeetingPage(),
+    //   name: sessions,
+    //   page: () => SessionsPage(),
     // ),
   ];
 }
