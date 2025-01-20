@@ -42,7 +42,8 @@ class SessionsPage extends GetView<GetxSessionsPresenter> {
                     ),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () {
-                      Get.toNamed('${Routes.sessions}/${session.sessionKey}');
+                      Get.toNamed(Routes.session,
+                          arguments: {"session": session});
                     },
                   );
                 },

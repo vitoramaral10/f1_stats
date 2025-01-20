@@ -30,4 +30,21 @@ class SessionEntity {
     required this.sessionType,
     required this.year,
   });
+
+  factory SessionEntity.empty() => SessionEntity(
+        circuitKey: 0,
+        circuitShortName: '',
+        countryCode: '',
+        countryKey: 0,
+        countryName: '',
+        dateEnd: DateTime.now(),
+        dateStart: DateTime.now(),
+        gmtOffset: '',
+        location: '',
+        meetingKey: 0,
+        sessionKey: 0,
+        sessionName: '',
+        sessionType: '',
+        year: 0,
+      );
 }

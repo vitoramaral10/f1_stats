@@ -7,6 +7,7 @@ class Routes {
   static const initial = '/';
   static const meetings = '/meetings';
   static const sessions = '/sessions';
+  static const session = '/session';
 
   static List<GetPage> pages = [
     GetPage(
@@ -22,6 +23,11 @@ class Routes {
       name: '$sessions/:meetingKey',
       page: () => SessionsPage(),
       binding: makeSessionsBindings(),
+    ),
+    GetPage(
+      name: session,
+      page: () => SessionPage(),
+      binding: makeSessionBindings(),
     ),
   ];
 }
