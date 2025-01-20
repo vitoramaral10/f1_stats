@@ -1,3 +1,0 @@
-enum FirebaseError {
-  unexpected,
-}
