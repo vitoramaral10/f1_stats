@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'main/routes.dart';
 
-void main() {
+Future<void> main() async {
+  // init intl
+  Intl.defaultLocale = 'pt_BR';
+  await initializeDateFormatting('pt_BR', null);
+
   runApp(const MyApp());
 }
 
@@ -24,6 +30,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: Routes.initial,
       getPages: Routes.pages,
+      locale: const Locale('pt', 'BR'),
     );
   }
 }

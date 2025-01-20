@@ -18,9 +18,10 @@ class Routes {
       page: () => MeetingsPage(),
       binding: makeMeetingsBindings(),
     ),
-    // GetPage(
-    //   name: sessions,
-    //   page: () => SessionsPage(),
-    // ),
+    GetPage(
+      name: '$sessions/:meetingKey',
+      page: () => SessionsPage(),
+      binding: makeSessionsBindings(),
+    ),
   ];
 }
