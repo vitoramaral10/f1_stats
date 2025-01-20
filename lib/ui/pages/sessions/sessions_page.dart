@@ -13,7 +13,9 @@ class SessionsPage extends GetView<GetxSessionsPresenter> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('F1 Stats'),
+        title: Text(
+          controller.meeting.meetingOfficialName,
+        ),
       ),
       body: Column(
         children: [

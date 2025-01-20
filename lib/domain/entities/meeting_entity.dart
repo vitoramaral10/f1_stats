@@ -26,4 +26,19 @@ class MeetingEntity {
     required this.meetingOfficialName,
     required this.year,
   });
+
+  factory MeetingEntity.empty() => MeetingEntity(
+        circuitKey: 0,
+        circuitShortName: '',
+        countryCode: '',
+        countryKey: 0,
+        countryName: '',
+        dateStart: DateTime.now(),
+        gmtOffset: '',
+        location: '',
+        meetingKey: 0,
+        meetingName: '',
+        meetingOfficialName: '',
+        year: 0,
+      );
 }

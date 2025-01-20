@@ -13,7 +13,7 @@ class MeetingsPage extends GetView<GetxMeetingsPresenter> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('F1 Stats'),
+        title: Text('${controller.year} Season'),
       ),
       body: Column(
         children: [
@@ -42,7 +42,10 @@ class MeetingsPage extends GetView<GetxMeetingsPresenter> {
                     ),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () {
-                      Get.toNamed('${Routes.sessions}/${meeting.meetingKey}');
+                      Get.toNamed(
+                        '${Routes.sessions}/${meeting.meetingKey}',
+                        arguments: {"meeting": meeting},
+                      );
                     },
                   );
                 },
