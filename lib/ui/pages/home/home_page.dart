@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
           ),
           Expanded(
               child: ListView.builder(
-            itemCount: DateTime.now().year - 2023,
+            itemCount: DateTime.now().year - 2022,
             itemBuilder: (context, index) {
               return ListTile(
                 title: Text('Temporada ${2023 + index}'),
