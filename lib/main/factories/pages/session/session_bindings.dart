@@ -11,6 +11,7 @@ class _SessionBinding implements Bindings {
     Get.put(
       GetxSessionPresenter(
         loadRaceControl: makeRemoteLoadRaceControl(),
+        loadWeather: makeRemoteLoadWeather(),
       ),
     );
   }

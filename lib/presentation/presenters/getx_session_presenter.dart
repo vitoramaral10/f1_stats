@@ -11,18 +11,23 @@ import '../../domain/usecases/usecases.dart';
 
 class GetxSessionPresenter extends GetxController implements SessionPresenter {
   final LoadRaceControl loadRaceControl;
+  final LoadWeather loadWeather;
 
   GetxSessionPresenter({
     required this.loadRaceControl,
+    required this.loadWeather,
   });
 
   final _session = Rx<SessionEntity>(SessionEntity.empty());
   final _raceControl = RxList<RaceControlEntity>([]);
+  final _weather = RxList<WeatherEntity>([]);
 
   @override
   SessionEntity get session => _session.value;
   @override
   List<RaceControlEntity> get raceControl => _raceControl;
+  @override
+  List<WeatherEntity> get weather => _weather;
 
   @override
   void onInit() {
@@ -32,6 +37,7 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
 
     // Timer.periodic(Duration(seconds: 10), (timer) {
     getRaceControl();
+    getWeather();
     // });
   }
 
@@ -42,6 +48,23 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
 
       _raceControl.value =
           await loadRaceControl.call(sessionKey: session.sessionKey);
+    } on DomainError catch (error) {
+      log(error.toString(), name: 'GetxSessionPresenter.getRaceControl');
+      Get.snackbar(
+        'Error',
+        error.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  @override
+  Future<void> getWeather() async {
+    try {
+      _weather.clear();
+
+      _weather.value = await loadWeather.call(sessionKey: session.sessionKey);
     } on DomainError catch (error) {
       log(error.toString(), name: 'GetxSessionPresenter.getRaceControl');
       Get.snackbar(
