@@ -12,6 +12,8 @@ class _SessionBinding implements Bindings {
       GetxSessionPresenter(
         loadRaceControl: makeRemoteLoadRaceControl(),
         loadWeather: makeRemoteLoadWeather(),
+        loadDrivers: makeRemoteLoadDrivers(),
+        loadPosition: makeRemoteLoadPosition(),
       ),
     );
   }
