@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:intl/intl.dart';
 
 import '../../../domain/entities/entities.dart';
 import '../../../presentation/presenters/presenters.dart';
@@ -51,17 +51,17 @@ class StandingsWidget extends StatelessWidget {
               verticalInside: BorderSide(color: Colors.grey),
             ),
             columnWidths: {
-              0: FlexColumnWidth(1),
-              1: FlexColumnWidth(1),
-              2: FlexColumnWidth(2),
-              3: FlexColumnWidth(2),
-              4: FlexColumnWidth(2),
-              5: FlexColumnWidth(1),
-              6: FlexColumnWidth(30),
-              7: FlexColumnWidth(3),
-              8: FlexColumnWidth(2),
-              9: FlexColumnWidth(2),
-              10: FlexColumnWidth(2),
+              0: FlexColumnWidth(9),
+              1: FlexColumnWidth(18),
+              2: FlexColumnWidth(27),
+              3: FlexColumnWidth(27),
+              4: FlexColumnWidth(27),
+              5: FlexColumnWidth(27),
+              6: FlexColumnWidth(45),
+              7: FlexColumnWidth(27),
+              8: FlexColumnWidth(27),
+              9: FlexColumnWidth(27),
+              10: FlexColumnWidth(27),
             },
             children: [
               TableRow(
@@ -84,17 +84,29 @@ class StandingsWidget extends StatelessWidget {
                   children: [
                     Center(child: Text(driver.position.toString())),
                     Center(child: Text(driver.driverAcronym)),
-                    Center(child: Text('LEADER')),
-                    Center(child: Text('+3.023')),
-                    Center(child: Text('1:23.456')),
+                    Center(child: Text(_formatDuration(driver.gap))),
+                    Center(child: Text(_formatDuration(driver.interval))),
+                    Center(child: Text(_formatDuration(driver.lastLap))),
                     Center(
-                      child: Text('DRS', style: TextStyle(color: Colors.green)),
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.green),
+                          borderRadius: BorderRadius.circular(4),
+                          color: driver.drs ? Colors.green : Colors.transparent,
+                        ),
+                        child: Text('DRS',
+                            style: TextStyle(
+                                color:
+                                    driver.drs ? Colors.white : Colors.green)),
+                      ),
                     ),
                     Center(child: Text('')),
-                    Center(child: Text('VERSTAPPEN')),
-                    Center(child: Text('22.271')),
-                    Center(child: Text('39.570')),
-                    Center(child: Text('42.271')),
+                    Center(child: Text(driver.driverLastName)),
+                    Center(child: Text(_formatDuration(driver.firstSector))),
+                    Center(child: Text(_formatDuration(driver.secondSector))),
+                    Center(child: Text(_formatDuration(driver.thirdSector))),
                   ],
                 ),
             ],
@@ -102,5 +114,21 @@ class StandingsWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _formatDuration(Duration? duration) {
+    if (duration == null) {
+      return '';
+    }
+
+    // formats: mm:ss.SSS or ss.SSS
+    final formatterWithMinutes = DateFormat('mm:ss.SSS');
+    final formatterWithoutMinutes = DateFormat('ss.SSS');
+
+    return duration.inMinutes > 0
+        ? formatterWithMinutes
+            .format(DateTime(0, 0, 0, 0, 0, 0, duration.inMilliseconds))
+        : formatterWithoutMinutes
+            .format(DateTime(0, 0, 0, 0, 0, 0, duration.inMilliseconds));
   }
 }

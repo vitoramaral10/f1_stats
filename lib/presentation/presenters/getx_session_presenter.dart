@@ -22,6 +22,7 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
     required this.loadPosition,
   });
 
+  Timer _standingsTimer = Timer(Duration(seconds: 1), () {});
   Timer _weatherTimer = Timer(Duration(minutes: 1), () {});
   Timer _raceControlTimer = Timer(Duration(seconds: 1), () {});
 
@@ -55,6 +56,10 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
     getWeather();
     getDrivers();
     getPositions();
+
+    _standingsTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      getRaceControl();
+    });
 
     _raceControlTimer = Timer.periodic(Duration(seconds: 5), (timer) {
       getRaceControl();
@@ -102,6 +107,25 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
   Future<void> getDrivers() async {
     try {
       _drivers.value = await loadDrivers.call(sessionKey: session.sessionKey);
+
+      _standings.value = _drivers
+          .map((driver) => StandingEntity(
+                position: 0,
+                driverAcronym: driver.nameAcronym,
+                driverNumber: driver.driverNumber,
+                gap: Duration(
+                  seconds: 32,
+                  milliseconds: 123,
+                ),
+                interval: Duration(seconds: 0),
+                lastLap: Duration(seconds: 0),
+                drs: false,
+                driverLastName: driver.lastName ?? '',
+                firstSector: Duration(seconds: 0),
+                secondSector: Duration(seconds: 0),
+                thirdSector: Duration(seconds: 0),
+              ))
+          .toList();
     } on DomainError catch (error) {
       log(error.toString(), name: 'GetxSessionPresenter.getDrivers');
       Get.snackbar(
@@ -119,21 +143,16 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
       List<PositionEntity> result =
           await loadPosition.call(sessionKey: session.sessionKey);
 
-      result.sort((a, b) => b.date.compareTo(a.date));
+      for (var pos in result) {
+        //atualiza a posição do piloto na lista de standings
+        var index = _standings
+            .indexWhere((element) => element.driverNumber == pos.driverNumber);
 
-      for (var i = 1; i <= 20; i++) {
-        var position = result.firstWhere(
-          (element) => element.position == i,
-        );
+        if (index != -1) {
+          _standings[index].position = pos.position;
 
-        _standings.add(StandingEntity(
-          position: i,
-          driverAcronym: _drivers
-              .firstWhere(
-                (element) => element.driverNumber == position.driverNumber,
-              )
-              .nameAcronym,
-        ));
+          _standings.sort((a, b) => a.position.compareTo(b.position));
+        }
       }
     } on DomainError catch (error) {
       log(error.toString(), name: 'GetxSessionPresenter.getPositions');
@@ -148,6 +167,7 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
 
   @override
   void onClose() {
+    _standingsTimer.cancel();
     _raceControlTimer.cancel();
     _weatherTimer.cancel();
     super.onClose();
