@@ -14,6 +14,8 @@ class _SessionBinding implements Bindings {
         loadWeather: makeRemoteLoadWeather(),
         loadDrivers: makeRemoteLoadDrivers(),
         loadPosition: makeRemoteLoadPosition(),
+        loadIntervals: makeRemoteLoadIntervals(),
+        loadLaps: makeRemoteLoadLaps(),
       ),
     );
   }

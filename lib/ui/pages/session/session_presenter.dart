@@ -7,9 +7,13 @@ abstract class SessionPresenter {
   List<DriverEntity> get drivers;
   List<PositionEntity> get positions;
   List<StandingEntity> get standings;
+  List<IntervalEntity> get intervals;
+  List<LapEntity> get laps;
 
   Future<void> getRaceControl();
   Future<void> getWeather();
   Future<void> getDrivers();
   Future<void> getPositions();
+  Future<void> getIntervals();
+  Future<void> getLaps();
 }

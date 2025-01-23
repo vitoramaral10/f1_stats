@@ -14,12 +14,16 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
   final LoadWeather loadWeather;
   final LoadDrivers loadDrivers;
   final LoadPosition loadPosition;
+  final LoadIntervals loadIntervals;
+  final LoadLaps loadLaps;
 
   GetxSessionPresenter({
     required this.loadRaceControl,
     required this.loadWeather,
     required this.loadDrivers,
     required this.loadPosition,
+    required this.loadIntervals,
+    required this.loadLaps,
   });
 
   Timer _standingsTimer = Timer(Duration(seconds: 1), () {});
@@ -32,6 +36,8 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
   final _drivers = RxList<DriverEntity>([]);
   final _positions = RxList<PositionEntity>([]);
   final _standings = RxList<StandingEntity>([]);
+  final _intervals = RxList<IntervalEntity>([]);
+  final _laps = RxList<LapEntity>([]);
 
   @override
   SessionEntity get session => _session.value;
@@ -45,6 +51,10 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
   List<PositionEntity> get positions => _positions;
   @override
   List<StandingEntity> get standings => _standings;
+  @override
+  List<IntervalEntity> get intervals => _intervals;
+  @override
+  List<LapEntity> get laps => _laps;
 
   @override
   void onInit() {
@@ -56,18 +66,21 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
     getWeather();
     getDrivers();
     getPositions();
+    getIntervals();
+    getLaps();
 
-    _standingsTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      getRaceControl();
-    });
+    // _standingsTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+    //   getRaceControl();
+    // });
 
-    _raceControlTimer = Timer.periodic(Duration(seconds: 5), (timer) {
-      getRaceControl();
-    });
+    // _raceControlTimer = Timer.periodic(Duration(seconds: 5), (timer) {
+    //   getRaceControl();
+    //   getIntervals();
+    // });
 
-    _weatherTimer = Timer.periodic(Duration(minutes: 1), (timer) {
-      getWeather();
-    });
+    // _weatherTimer = Timer.periodic(Duration(minutes: 1), (timer) {
+    //   getWeather();
+    // });
   }
 
   @override
@@ -113,17 +126,8 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
                 position: 0,
                 driverAcronym: driver.nameAcronym,
                 driverNumber: driver.driverNumber,
-                gap: Duration(
-                  seconds: 32,
-                  milliseconds: 123,
-                ),
-                interval: Duration(seconds: 0),
-                lastLap: Duration(seconds: 0),
                 drs: false,
                 driverLastName: driver.lastName ?? '',
-                firstSector: Duration(seconds: 0),
-                secondSector: Duration(seconds: 0),
-                thirdSector: Duration(seconds: 0),
               ))
           .toList();
     } on DomainError catch (error) {
@@ -156,6 +160,64 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
       }
     } on DomainError catch (error) {
       log(error.toString(), name: 'GetxSessionPresenter.getPositions');
+      Get.snackbar(
+        'Error',
+        error.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  @override
+  Future<void> getIntervals() async {
+    try {
+      _intervals.value =
+          await loadIntervals.call(sessionKey: session.sessionKey);
+
+      _intervals.sort((a, b) => a.date.compareTo(b.date));
+
+      for (var interval in _intervals) {
+        var index = _standings.indexWhere(
+            (element) => element.driverNumber == interval.driverNumber);
+
+        if (index != -1) {
+          _standings[index].interval = interval.interval;
+          _standings[index].gap = interval.gapToLeader;
+        }
+      }
+    } on DomainError catch (error) {
+      log(error.toString(), name: 'GetxSessionPresenter.getIntervals');
+      Get.snackbar(
+        'Error',
+        error.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  @override
+  Future<void> getLaps() async {
+    try {
+      _laps.value = await loadLaps.call(sessionKey: session.sessionKey);
+
+      _laps.sort((a, b) =>
+          (a.dateStart ?? DateTime(0)).compareTo(b.dateStart ?? DateTime(0)));
+
+      for (var lap in _laps) {
+        var index = _standings
+            .indexWhere((element) => element.driverNumber == lap.driverNumber);
+
+        if (index != -1) {
+          _standings[index].lastLap = lap.lapDuration;
+          _standings[index].firstSector = lap.durationSector1;
+          _standings[index].secondSector = lap.durationSector2;
+          _standings[index].thirdSector = lap.durationSector3;
+        }
+      }
+    } on DomainError catch (error) {
+      log(error.toString(), name: 'GetxSessionPresenter.getLaps');
       Get.snackbar(
         'Error',
         error.toString(),

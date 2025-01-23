@@ -116,9 +116,12 @@ class StandingsWidget extends StatelessWidget {
     );
   }
 
-  String _formatDuration(Duration? duration) {
+  String _formatDuration(dynamic duration) {
     if (duration == null) {
       return '';
+    }
+    if (duration is String) {
+      return duration;
     }
 
     // formats: mm:ss.SSS or ss.SSS

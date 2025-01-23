@@ -1,4 +1,6 @@
 export 'load_drivers/load_drivers.dart';
+export 'load_intervals/load_intervals.dart';
+export 'load_laps/load_laps.dart';
 export 'load_meetings/load_meetings.dart';
 export 'load_position/load_position.dart';
 export 'load_race_control/load_race_control.dart';
