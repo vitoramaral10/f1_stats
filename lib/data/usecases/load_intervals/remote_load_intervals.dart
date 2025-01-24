@@ -6,17 +6,14 @@ import '../../../domain/usecases/usecases.dart';
 import '../../http/http.dart';
 import '../../models/models.dart';
 
-class RemoteLoadPositions implements LoadPositions {
+class RemoteLoadIntervals implements LoadIntervals {
   final HttpClient httpClient;
   final String url;
 
-  RemoteLoadPositions({
-    required this.httpClient,
-    required this.url,
-  });
+  RemoteLoadIntervals({required this.httpClient, required this.url});
 
   @override
-  Future<List<PositionEntity>> call({
+  Future<List<IntervalEntity>> call({
     required int sessionKey,
   }) async {
     try {
@@ -27,11 +24,11 @@ class RemoteLoadPositions implements LoadPositions {
       );
 
       return result!
-          .map<PositionEntity>(
-              (json) => PositionModel.fromJson(json).toEntity())
+          .map<IntervalEntity>(
+              (json) => IntervalModel.fromJson(json).toEntity())
           .toList();
     } on HttpError catch (error) {
-      log(error.toString(), name: 'RemoteLoadWeather.call');
+      log(error.toString(), name: 'RemoteLoadDrivers.call');
       throw DomainError.unexpected;
     }
   }

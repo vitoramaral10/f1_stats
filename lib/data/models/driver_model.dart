@@ -2,31 +2,31 @@ import 'package:f1_stats/domain/entities/entities.dart';
 
 class DriverModel {
   final String broadcastName;
-  final String countryCode;
+  final String? countryCode;
   final int driverNumber;
-  final String firstName;
+  final String? firstName;
   final String fullName;
   final String? headshotUrl;
-  final String lastName;
+  final String? lastName;
   final int meetingKey;
   final String nameAcronym;
   final int sessionKey;
-  final String teamColour;
-  final String teamName;
+  final String? teamColour;
+  final String? teamName;
 
   DriverModel({
     required this.broadcastName,
-    required this.countryCode,
+    this.countryCode,
     required this.driverNumber,
-    required this.firstName,
+    this.firstName,
     required this.fullName,
-     this.headshotUrl,
-    required this.lastName,
+    this.headshotUrl,
+    this.lastName,
     required this.meetingKey,
     required this.nameAcronym,
     required this.sessionKey,
-    required this.teamColour,
-    required this.teamName,
+    this.teamColour,
+    this.teamName,
   });
 
   factory DriverModel.fromJson(Map json) {

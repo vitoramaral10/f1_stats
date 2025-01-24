@@ -35,82 +35,91 @@ class WeatherCard extends StatelessWidget {
                       : Column(
                           children: [
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Row(
+                                Column(
                                   children: [
-                                    Text('Air Temp.',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelLarge),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      '${weather.last.airTemperature}°C',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium!
-                                          .copyWith(
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                    Row(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text('Air Temp.',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .labelLarge),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              '${weather.last.airTemperature}°C',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium!
+                                                  .copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(width: 16),
+                                        Row(
+                                          children: [
+                                            Text('Humidity',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .labelLarge),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              '${weather.last.humidity}%',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium!
+                                                  .copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                                SizedBox(width: 16),
-                                Row(
-                                  children: [
-                                    Text('Humidity',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelLarge),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      '${weather.last.humidity}%',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium!
-                                          .copyWith(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text('Track Temp.',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelLarge),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      '${weather.last.trackTemperature}°C',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium!
-                                          .copyWith(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(width: 16),
-                                Row(
-                                  children: [
-                                    Text('Wind',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelLarge),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      '${weather.last.windSpeed} km/h',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium!
-                                          .copyWith(
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                    Row(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text('Track Temp.',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .labelLarge),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              '${weather.last.trackTemperature}°C',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium!
+                                                  .copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(width: 16),
+                                        Row(
+                                          children: [
+                                            Text('Wind',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .labelLarge),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              '${weather.last.windSpeed} km/h',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium!
+                                                  .copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -119,7 +128,6 @@ class WeatherCard extends StatelessWidget {
                             Spacer(),
                             SizedBox(
                               height: 50,
-                              width: double.infinity,
                               child: Obx(
                                 () => LineChart(
                                   LineChartData(
