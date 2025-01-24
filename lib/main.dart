@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 
 import 'main/routes.dart';
 
@@ -22,13 +22,17 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'F1 Stats',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFFD70000)),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Color(0xFFD70000),
+          brightness: Brightness.dark,
+        ),
         appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xFFD70000),
           foregroundColor: Colors.white,
         ),
         useMaterial3: true,
       ),
+      themeMode: ThemeMode.dark,
       initialRoute: Routes.initial,
       getPages: Routes.pages,
       locale: const Locale('pt', 'BR'),

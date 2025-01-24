@@ -12,56 +12,61 @@ class RaceControlCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        children: [
-          Text(
-            'Race Control',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          Divider(),
-          Container(
-            height: 200,
-            padding: EdgeInsets.all(16),
-            child: Obx(
-              () => ListView.builder(
-                itemCount: raceControl.length,
-                itemBuilder: (context, index) {
-                  final item = raceControl[index];
-                  return Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(color: Colors.grey),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        if (item.flag != null)
-                          Icon(
-                            Icons.flag,
-                            color: item.flag!.contains('GREEN') ||
-                                    item.flag!.contains('CLEAR')
-                                ? Colors.green
-                                : item.flag!.contains('YELLOW')
-                                    ? Colors.yellow
-                                    : item.flag!.contains('CHEQUERED')
-                                        ? Colors.black
-                                        : item.flag!.contains('BLUE')
-                                            ? Colors.blue
-                                            : item.flag!.contains('RED')
-                                                ? Colors.red
-                                                : null,
+    return SizedBox(
+      width: 300,
+      height: 200,
+      child: Card(
+        child: Column(
+          children: [
+            Text(
+              'Race Control',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            Divider(),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Obx(
+                  () => ListView.builder(
+                    itemCount: raceControl.length,
+                    itemBuilder: (context, index) {
+                      final item = raceControl[index];
+                      return Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(color: Colors.grey),
                           ),
-                        SizedBox(width: 8),
-                        Expanded(child: Text(item.message)),
-                      ],
-                    ),
-                  );
-                },
+                        ),
+                        child: Row(
+                          children: [
+                            if (item.flag != null)
+                              Icon(
+                                Icons.flag,
+                                color: item.flag!.contains('GREEN') ||
+                                        item.flag!.contains('CLEAR')
+                                    ? Colors.green
+                                    : item.flag!.contains('YELLOW')
+                                        ? Colors.yellow
+                                        : item.flag!.contains('CHEQUERED')
+                                            ? Colors.black
+                                            : item.flag!.contains('BLUE')
+                                                ? Colors.blue
+                                                : item.flag!.contains('RED')
+                                                    ? Colors.red
+                                                    : null,
+                              ),
+                            SizedBox(width: 8),
+                            Expanded(child: Text(item.message)),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
