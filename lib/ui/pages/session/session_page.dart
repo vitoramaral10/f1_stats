@@ -41,11 +41,11 @@ class StandingsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Card(
-        child: Padding(
-          padding: EdgeInsets.all(8),
-          child: Table(
+    return Card(
+      child: Padding(
+        padding: EdgeInsets.all(8),
+        child: Obx(
+          () => Table(
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
             border: TableBorder(
               verticalInside: BorderSide(color: Colors.grey),
@@ -123,6 +123,8 @@ class StandingsWidget extends StatelessWidget {
     if (duration is String) {
       return duration;
     }
+
+    duration = Duration(milliseconds: (duration * 1000).toInt());
 
     // formats: mm:ss.SSS or ss.SSS
     final formatterWithMinutes = DateFormat('mm:ss.SSS');

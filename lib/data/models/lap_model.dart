@@ -34,7 +34,7 @@ class LapModel {
     required this.segmentsSector2,
     required this.segmentsSector3,
     required this.sessionKey,
-     this.stSpeed,
+    this.stSpeed,
   });
 
   factory LapModel.fromJson(Map json) {
@@ -43,9 +43,9 @@ class LapModel {
           ? DateTime.parse(json['date_start'])
           : null,
       driverNumber: json['driver_number'],
-      durationSector1: json['duration_sector1'],
-      durationSector2: json['duration_sector2'],
-      durationSector3: json['duration_sector3'],
+      durationSector1: json['duration_sector_1'],
+      durationSector2: json['duration_sector_2'],
+      durationSector3: json['duration_sector_3'],
       i1Speed: json['i1_speed'],
       i2Speed: json['i2_speed'],
       isPitOutLap: json['is_pit_out_lap'],

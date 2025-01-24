@@ -69,18 +69,19 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
     getIntervals();
     getLaps();
 
-    // _standingsTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-    //   getRaceControl();
-    // });
+    _standingsTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      getPositions();
+      getRaceControl();
+    });
 
-    // _raceControlTimer = Timer.periodic(Duration(seconds: 5), (timer) {
-    //   getRaceControl();
-    //   getIntervals();
-    // });
+    _raceControlTimer = Timer.periodic(Duration(seconds: 5), (timer) {
+      getIntervals();
+      getLaps();
+    });
 
-    // _weatherTimer = Timer.periodic(Duration(minutes: 1), (timer) {
-    //   getWeather();
-    // });
+    _weatherTimer = Timer.periodic(Duration(minutes: 1), (timer) {
+      getWeather();
+    });
   }
 
   @override
