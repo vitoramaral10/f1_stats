@@ -14,7 +14,7 @@ class LapEntity {
   final List<int> segmentsSector2;
   final List<int> segmentsSector3;
   final int sessionKey;
-  final int stSpeed;
+  final int? stSpeed;
 
   LapEntity({
     this.dateStart,
@@ -32,6 +32,6 @@ class LapEntity {
     required this.segmentsSector2,
     required this.segmentsSector3,
     required this.sessionKey,
-    required this.stSpeed,
+    this.stSpeed,
   });
 }

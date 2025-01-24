@@ -16,7 +16,7 @@ class LapModel {
   final List<int> segmentsSector2;
   final List<int> segmentsSector3;
   final int sessionKey;
-  final int stSpeed;
+  final int? stSpeed;
 
   LapModel({
     this.dateStart,
@@ -34,7 +34,7 @@ class LapModel {
     required this.segmentsSector2,
     required this.segmentsSector3,
     required this.sessionKey,
-    required this.stSpeed,
+     this.stSpeed,
   });
 
   factory LapModel.fromJson(Map json) {
