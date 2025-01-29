@@ -15,100 +15,62 @@ class SessionPage extends GetView<GetxSessionPresenter> {
       appBar: AppBar(
         title: Text(controller.session.sessionName),
       ),
-      body: Column(
+      body: const Column(
         children: [
-          Row(
-            children: [
-              Expanded(
-                  child: RaceControlCard(raceControl: controller.raceControl)),
-              WeatherCard(weather: controller.weather),
-            ],
-          ),
-          Expanded(child: StandingsWidget(standing: controller.standings)),
+          SessionHeader(),
+          Expanded(child: StandingsWidget()),
         ],
       ),
     );
   }
 }
 
-class StandingsWidget extends StatelessWidget {
-  final List<StandingEntity> standing;
+class SessionHeader extends GetView<GetxSessionPresenter> {
+  const SessionHeader({super.key});
 
-  const StandingsWidget({
-    super.key,
-    required this.standing,
-  });
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(child: RaceControlCard(raceControl: controller.raceControl)),
+        WeatherCard(weather: controller.weather),
+      ],
+    );
+  }
+}
+
+class StandingsWidget extends GetView<GetxSessionPresenter> {
+  const StandingsWidget({super.key});
+
+  static const _columnWidths = {
+    0: FlexColumnWidth(9), // Position
+    1: FlexColumnWidth(18), // Acronym
+    2: FlexColumnWidth(27), // Gap
+    3: FlexColumnWidth(27), // Interval
+    4: FlexColumnWidth(27), // Last Lap
+    5: FlexColumnWidth(27), // DRS
+    6: FlexColumnWidth(45), // Spacer
+    7: FlexColumnWidth(27), // Name
+    8: FlexColumnWidth(27), // S1
+    9: FlexColumnWidth(27), // S2
+    10: FlexColumnWidth(27), // S3
+  };
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         child: Obx(
           () => Table(
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            border: TableBorder(
+            border: const TableBorder(
               verticalInside: BorderSide(color: Colors.grey),
             ),
-            columnWidths: {
-              0: FlexColumnWidth(9),
-              1: FlexColumnWidth(18),
-              2: FlexColumnWidth(27),
-              3: FlexColumnWidth(27),
-              4: FlexColumnWidth(27),
-              5: FlexColumnWidth(27),
-              6: FlexColumnWidth(45),
-              7: FlexColumnWidth(27),
-              8: FlexColumnWidth(27),
-              9: FlexColumnWidth(27),
-              10: FlexColumnWidth(27),
-            },
+            columnWidths: _columnWidths,
             children: [
-              TableRow(
-                children: [
-                  Center(child: Text('')),
-                  Center(child: Text('')),
-                  Center(child: Text('GAP')),
-                  Center(child: Text('INTERVAL')),
-                  Center(child: Text('LAST LAP')),
-                  Center(child: Text('')),
-                  Center(child: Text('')),
-                  Center(child: Text('')),
-                  Center(child: Text('1')),
-                  Center(child: Text('2')),
-                  Center(child: Text('3')),
-                ],
-              ),
-              for (var driver in standing)
-                TableRow(
-                  children: [
-                    Center(child: Text(driver.position.toString())),
-                    Center(child: Text(driver.driverAcronym)),
-                    Center(child: Text(_formatDuration(driver.gap))),
-                    Center(child: Text(_formatDuration(driver.interval))),
-                    Center(child: Text(_formatDuration(driver.lastLap))),
-                    Center(
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.green),
-                          borderRadius: BorderRadius.circular(4),
-                          color: driver.drs ? Colors.green : Colors.transparent,
-                        ),
-                        child: Text('DRS',
-                            style: TextStyle(
-                                color:
-                                    driver.drs ? Colors.white : Colors.green)),
-                      ),
-                    ),
-                    Center(child: Text('')),
-                    Center(child: Text(driver.driverLastName)),
-                    Center(child: Text(_formatDuration(driver.firstSector))),
-                    Center(child: Text(_formatDuration(driver.secondSector))),
-                    Center(child: Text(_formatDuration(driver.thirdSector))),
-                  ],
-                ),
+              _buildHeader(),
+              ...controller.standings.map((driver) => _buildRow(driver)),
             ],
           ),
         ),
@@ -116,7 +78,90 @@ class StandingsWidget extends StatelessWidget {
     );
   }
 
-  String _formatDuration(dynamic duration) {
+  TableRow _buildHeader() {
+    return const TableRow(
+      children: [
+        TableCell(child: SizedBox()), // Position
+        TableCell(child: SizedBox()), // Acronym
+        CenteredText('GAP'),
+        CenteredText('INTERVAL'),
+        CenteredText('LAST LAP'),
+        TableCell(child: SizedBox()), // DRS
+        TableCell(child: SizedBox()), // Spacer
+        TableCell(child: SizedBox()), // Name
+        CenteredText('S1'),
+        CenteredText('S2'),
+        CenteredText('S3'),
+      ],
+    );
+  }
+
+  TableRow _buildRow(StandingEntity driver) {
+    return TableRow(
+      children: [
+        CenteredText(driver.position.toString()),
+        CenteredText(driver.driverAcronym),
+        CenteredText(TimeFormatter.format(driver.gap)),
+        CenteredText(TimeFormatter.format(driver.interval)),
+        CenteredText(TimeFormatter.format(driver.lastLap)),
+        DRSIndicator(active: driver.drs),
+        const TableCell(child: SizedBox()), // Spacer
+        CenteredText(driver.driverLastName),
+        CenteredText(TimeFormatter.format(driver.firstSector)),
+        CenteredText(TimeFormatter.format(driver.secondSector)),
+        CenteredText(TimeFormatter.format(driver.thirdSector)),
+      ],
+    );
+  }
+}
+
+// Remover a classe StandingsHeader que não é mais necessária
+
+// Remove the StandingsRow class as it's no longer needed
+
+class CenteredText extends StatelessWidget {
+  final String text;
+
+  const CenteredText(this.text, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return TableCell(
+      child: Center(child: Text(text)),
+    );
+  }
+}
+
+class DRSIndicator extends StatelessWidget {
+  final bool active;
+
+  const DRSIndicator({super.key, required this.active});
+
+  @override
+  Widget build(BuildContext context) {
+    return TableCell(
+      child: Center(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.green),
+            borderRadius: BorderRadius.circular(4),
+            color: active ? Colors.green : Colors.transparent,
+          ),
+          child: Text(
+            'DRS',
+            style: TextStyle(
+              color: active ? Colors.white : Colors.green,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class TimeFormatter {
+  static String format(dynamic duration) {
     if (duration == null) {
       return '';
     }
