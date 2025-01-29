@@ -53,7 +53,7 @@ class HomePage extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.black.withOpacity(0.7), Colors.transparent],
+                  colors: [Colors.black.withAlpha(179), Colors.transparent],
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
                 ),
@@ -100,8 +100,8 @@ class HomePage extends StatelessWidget {
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [
-                                  Colors.black.withOpacity(0.7),
-                                  Colors.black.withOpacity(0.3),
+                                  Colors.black.withAlpha(179),
+                                  Colors.black.withAlpha(77),
                                 ],
                                 begin: Alignment.bottomCenter,
                                 end: Alignment.topCenter,
@@ -124,7 +124,7 @@ class HomePage extends StatelessWidget {
                                       Shadow(
                                         offset: const Offset(1, 1),
                                         blurRadius: 3,
-                                        color: Colors.black.withOpacity(0.5),
+                                        color: Colors.black.withAlpha(128),
                                       ),
                                     ],
                                   ),
@@ -141,7 +141,7 @@ class HomePage extends StatelessWidget {
                                       Shadow(
                                         offset: const Offset(1, 1),
                                         blurRadius: 3,
-                                        color: Colors.black.withOpacity(0.5),
+                                        color: Colors.black.withAlpha(128),
                                       ),
                                     ],
                                   ),
