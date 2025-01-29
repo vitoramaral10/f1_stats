@@ -3,31 +3,43 @@ import 'package:get/get.dart';
 import '../ui/pages/pages.dart';
 import 'factories/factories.dart';
 
-class Routes {
+abstract class Routes {
   static const initial = '/';
   static const meetings = '/meetings';
   static const sessions = '/sessions';
   static const session = '/session';
 
-  static List<GetPage> pages = [
-    GetPage(
+  static final List<GetPage> pages = [
+    _createPage(
       name: initial,
-      page: () => HomePage(),
+      page: HomePage(),
     ),
-    GetPage(
+    _createPage(
       name: '$meetings/:year',
-      page: () => MeetingsPage(),
+      page: MeetingsPage(),
       binding: makeMeetingsBindings(),
     ),
-    GetPage(
+    _createPage(
       name: '$sessions/:meetingKey',
-      page: () => SessionsPage(),
+      page: SessionsPage(),
       binding: makeSessionsBindings(),
     ),
-    GetPage(
+    _createPage(
       name: session,
-      page: () => SessionPage(),
+      page: SessionPage(),
       binding: makeSessionBindings(),
     ),
   ];
+
+  static GetPage _createPage({
+    required String name,
+    required dynamic page,
+    Bindings? binding,
+  }) {
+    return GetPage(
+      name: name,
+      page: () => page,
+      binding: binding,
+    );
+  }
 }

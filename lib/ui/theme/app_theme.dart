@@ -21,6 +21,5 @@ class AppTheme {
       backgroundColor: _primaryColor,
       foregroundColor: Colors.white,
     ),
-    useMaterial3: true,
   );
 }
