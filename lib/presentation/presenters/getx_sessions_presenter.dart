@@ -18,6 +18,7 @@ class GetxSessionsPresenter extends GetxController
   final _meeting = Rx<MeetingEntity>(
     MeetingEntity.empty(),
   );
+  final _isLoading = false.obs;
 
   @override
   List<SessionEntity> get sessions => _sessions.value;
@@ -25,6 +26,7 @@ class GetxSessionsPresenter extends GetxController
   int get meetingKey => _meetingKey.value;
   @override
   MeetingEntity get meeting => _meeting.value;
+  bool get isLoading => _isLoading.value;
 
   @override
   void onInit() {
@@ -42,6 +44,7 @@ class GetxSessionsPresenter extends GetxController
   @override
   Future<void> getSessions() async {
     try {
+      _isLoading.value = true;
       _sessions.value = await loadSessions.call(
         meetingKey: meetingKey,
       );
@@ -53,6 +56,8 @@ class GetxSessionsPresenter extends GetxController
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
+    } finally {
+      _isLoading.value = false;
     }
   }
 }
