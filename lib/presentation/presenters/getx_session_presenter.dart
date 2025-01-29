@@ -105,7 +105,11 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
   @override
   Future<void> getWeather() async {
     try {
-      _weather.value = await loadWeather.call(sessionKey: session.sessionKey);
+      var result = await loadWeather.call(sessionKey: session.sessionKey);
+
+      result.sort((a, b) => a.date.compareTo(b.date));
+
+      _weather.value = result;
     } on DomainError catch (error) {
       log(error.toString(), name: 'GetxSessionPresenter.getWeather');
       Get.snackbar(

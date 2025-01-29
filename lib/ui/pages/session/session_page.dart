@@ -21,7 +21,7 @@ class SessionPage extends GetView<GetxSessionPresenter> {
             children: [
               Expanded(
                   child: RaceControlCard(raceControl: controller.raceControl)),
-              Expanded(child: WeatherCard(weather: controller.weather)),
+              WeatherCard(weather: controller.weather),
             ],
           ),
           Expanded(child: StandingsWidget(standing: controller.standings)),

@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         title: 'F1 Stats',
         theme: AppTheme.light,
         darkTheme: AppTheme.dark,
-        themeMode: ThemeMode.system,
+        themeMode: ThemeMode.dark, // Configurando tema escuro como padrão
         initialRoute: Routes.initial,
         getPages: Routes.pages,
         locale: const Locale('pt', 'BR'),
