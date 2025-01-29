@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../../domain/entities/meeting_entity.dart';
 import '../../../main/routes.dart';
 import '../../../presentation/presenters/presenters.dart';
 
 class MeetingsPage extends GetView<GetxMeetingsPresenter> {
+  static const String pageDescription =
+      'Aqui você encontra todas as corridas da temporada.';
+
   const MeetingsPage({super.key});
 
   @override
@@ -20,39 +24,49 @@ class MeetingsPage extends GetView<GetxMeetingsPresenter> {
           Padding(
             padding: const EdgeInsets.all(16),
             child: Text(
-              'Aqui você encontra todas as corridas da temporada.',
+              pageDescription,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
           Expanded(
             child: Obx(
-              () => ListView.builder(
-                itemCount: controller.meetings.length,
-                itemBuilder: (context, index) {
-                  final meeting = controller.meetings[index];
-                  return ListTile(
-                    leading: CountryFlag.fromCountryCode(
-                      meeting.countryCode,
-                      width: 32,
-                      height: 18,
+              () => controller.isLoading.value
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView.builder(
+                      itemCount: controller.meetings.length,
+                      itemBuilder: (_, index) => _MeetingListTile(
+                        meeting: controller.meetings[index],
+                      ),
                     ),
-                    title: Text(meeting.meetingName),
-                    subtitle: Text(
-                      '${meeting.location} - ${DateFormat.yMMMd().add_jm().format(meeting.dateStart)}',
-                    ),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () {
-                      Get.toNamed(
-                        '${Routes.sessions}/${meeting.meetingKey}',
-                        arguments: {"meeting": meeting},
-                      );
-                    },
-                  );
-                },
-              ),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _MeetingListTile extends StatelessWidget {
+  final MeetingEntity meeting;
+
+  const _MeetingListTile({required this.meeting});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: CountryFlag.fromCountryCode(
+        meeting.countryCode,
+        width: 32,
+        height: 18,
+      ),
+      title: Text(meeting.meetingName),
+      subtitle: Text(
+        '${meeting.location} - ${DateFormat.yMMMd().add_jm().format(meeting.dateStart)}',
+      ),
+      trailing: const Icon(Icons.chevron_right),
+      onTap: () => Get.toNamed(
+        '${Routes.sessions}/${meeting.meetingKey}',
+        arguments: {"meeting": meeting},
       ),
     );
   }

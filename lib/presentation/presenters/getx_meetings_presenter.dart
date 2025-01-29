@@ -15,11 +15,13 @@ class GetxMeetingsPresenter extends GetxController
 
   final _meetings = Rx<List<MeetingEntity>>([]);
   final _year = Rx<int>(DateTime.now().year);
+  final _isLoading = false.obs;
 
   @override
   List<MeetingEntity> get meetings => _meetings.value;
   @override
   int get year => _year.value;
+  RxBool get isLoading => _isLoading;
 
   @override
   void onInit() {
@@ -34,6 +36,7 @@ class GetxMeetingsPresenter extends GetxController
 
   @override
   Future<void> getMeetings() async {
+    _isLoading.value = true;
     try {
       _meetings.value = await loadMeetings.call(
         year: _year.value,
@@ -46,6 +49,8 @@ class GetxMeetingsPresenter extends GetxController
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
+    } finally {
+      _isLoading.value = false;
     }
   }
 }

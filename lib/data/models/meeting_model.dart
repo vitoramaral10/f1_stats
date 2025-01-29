@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../../domain/entities/entities.dart';
 
 class MeetingModel {
@@ -55,10 +57,11 @@ class MeetingModel {
       countryName: json['country_name'],
       dateStart: DateTime.parse(json['date_start']),
       gmtOffset: json['gmt_offset'],
-      location: json['location'],
+      location: utf8.decode(json['location'].toString().codeUnits),
       meetingKey: json['meeting_key'],
-      meetingName: json['meeting_name'],
-      meetingOfficialName: json['meeting_official_name'],
+      meetingName: utf8.decode(json['meeting_name'].toString().codeUnits),
+      meetingOfficialName:
+          utf8.decode(json['meeting_official_name'].toString().codeUnits),
       year: json['year'],
     );
   }
