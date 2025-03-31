@@ -101,7 +101,9 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
   Future<void> getWeather() async {
     try {
       List<WeatherEntity> result = await loadWeather.call(
-          sessionKey: session.sessionKey, lastUpdate: _lastUpdateWeather);
+        sessionKey: session.sessionKey,
+        lastUpdate: _lastUpdateWeather,
+      );
 
       if (result.isEmpty) {
         return;
@@ -117,7 +119,7 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
       _weather.sort((a, b) => a.date.compareTo(b.date));
 
       // Atualiza o horário da última atualização com a entrada mais recente
-      _lastUpdateWeather = result.first.date;
+      _lastUpdateWeather = result.last.date;
     } on DomainError catch (error) {
       log(error.toString(), name: 'GetxSessionPresenter.getWeather');
       Get.snackbar(
