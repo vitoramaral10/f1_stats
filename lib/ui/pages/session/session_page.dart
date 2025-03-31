@@ -20,6 +20,10 @@ class SessionPage extends GetView<GetxSessionPresenter> {
             WeatherCard(weather: controller.weather),
             SizedBox(height: 8),
             RaceControlCard(raceControl: controller.raceControl),
+            SizedBox(height: 8),
+            StandingsCard(
+              drivers: controller.drivers,
+            ),
           ],
         ),
       ),

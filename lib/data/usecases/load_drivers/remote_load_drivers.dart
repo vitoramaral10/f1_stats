@@ -6,14 +6,17 @@ import '../../../domain/usecases/usecases.dart';
 import '../../http/http.dart';
 import '../../models/models.dart';
 
-class RemoteLoadWeather implements LoadWeather {
+class RemoteLoadDrivers implements LoadDrivers {
   final HttpClient httpClient;
   final String url;
 
-  RemoteLoadWeather({required this.httpClient, required this.url});
+  RemoteLoadDrivers({
+    required this.httpClient,
+    required this.url,
+  });
 
   @override
-  Future<List<WeatherEntity>> call({
+  Future<List<DriverEntity>> call({
     required int sessionKey,
   }) async {
     try {
@@ -24,7 +27,7 @@ class RemoteLoadWeather implements LoadWeather {
       );
 
       return result!
-          .map<WeatherEntity>((json) => WeatherModel.fromJson(json).toEntity())
+          .map<DriverEntity>((json) => DriverModel.fromJson(json).toEntity())
           .toList();
     } on HttpError catch (error) {
       log(error.toString(), name: 'RemoteLoadWeather.call');

@@ -12,10 +12,12 @@ import '../../domain/usecases/usecases.dart';
 class GetxSessionPresenter extends GetxController implements SessionPresenter {
   final LoadRaceControl loadRaceControl;
   final LoadWeather loadWeather;
+  final LoadDrivers loadDrivers;
 
   GetxSessionPresenter({
     required this.loadRaceControl,
     required this.loadWeather,
+    required this.loadDrivers,
   });
 
   Timer _weatherTimer = Timer(Duration(minutes: 1), () {});
@@ -24,6 +26,7 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
   final _session = Rx<SessionEntity>(SessionEntity.empty());
   final _raceControl = RxList<RaceControlEntity>([]);
   final _weather = RxList<WeatherEntity>([]);
+  final _drivers = RxList<DriverEntity>([]);
 
   @override
   SessionEntity get session => _session.value;
@@ -31,6 +34,8 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
   List<RaceControlEntity> get raceControl => _raceControl;
   @override
   List<WeatherEntity> get weather => _weather;
+  @override
+  List<DriverEntity> get drivers => _drivers;
 
   @override
   void onInit() {
@@ -40,6 +45,7 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
 
     getRaceControl();
     getWeather();
+    getDrivers();
 
     _raceControlTimer = Timer.periodic(Duration(seconds: 5), (timer) {
       getRaceControl();
@@ -53,10 +59,12 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
   @override
   Future<void> getRaceControl() async {
     try {
-      var result = await loadRaceControl.call(sessionKey: session.sessionKey);
+      List<RaceControlEntity> result =
+          await loadRaceControl.call(sessionKey: session.sessionKey);
 
       result.sort((a, b) => b.date.compareTo(a.date));
-      _raceControl.value = result;
+
+      _raceControl.assignAll(result);
     } on DomainError catch (error) {
       log(error.toString(), name: 'GetxSessionPresenter.getRaceControl');
       Get.snackbar(
@@ -71,13 +79,32 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
   @override
   Future<void> getWeather() async {
     try {
-      var result = await loadWeather.call(sessionKey: session.sessionKey);
+      List<WeatherEntity> result =
+          await loadWeather.call(sessionKey: session.sessionKey);
 
       result.sort((a, b) => a.date.compareTo(b.date));
 
-      _weather.value = result;
+      _weather.assignAll(result);
     } on DomainError catch (error) {
       log(error.toString(), name: 'GetxSessionPresenter.getWeather');
+      Get.snackbar(
+        'Error',
+        error.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  @override
+  Future<void> getDrivers() async {
+    try {
+      List<DriverEntity> result =
+          await loadDrivers.call(sessionKey: session.sessionKey);
+
+      _drivers.assignAll(result);
+    } on DomainError catch (error) {
+      log(error.toString(), name: 'GetxSessionPresenter.getDrivers');
       Get.snackbar(
         'Error',
         error.toString(),
