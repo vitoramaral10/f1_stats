@@ -25,6 +25,7 @@ class SessionPage extends GetView<GetxSessionPresenter> {
               session: controller.session,
               drivers: controller.drivers,
               intervals: controller.intervals,
+              laps: controller.laps,
             ),
           ],
         ),

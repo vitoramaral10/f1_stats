@@ -15,6 +15,7 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
   final LoadDrivers loadDrivers;
   final LoadPositions loadPositions;
   final LoadIntervals loadIntervals;
+  final LoadLaps loadLaps;
 
   GetxSessionPresenter({
     required this.loadRaceControl,
@@ -22,6 +23,7 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
     required this.loadDrivers,
     required this.loadPositions,
     required this.loadIntervals,
+    required this.loadLaps,
   });
 
   Timer _weatherTimer = Timer(Duration(minutes: 1), () {});
@@ -30,12 +32,14 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
   DateTime? _lastUpdateWeather;
   DateTime? _lastUpdateRaceControl;
   DateTime? _lastUpdateIntervals;
+  DateTime? _lastUpdateLaps;
 
   final _session = Rx<SessionEntity>(SessionEntity.empty());
   final _raceControl = RxList<RaceControlEntity>([]);
   final _weather = RxList<WeatherEntity>([]);
   final _drivers = RxList<DriverEntity>([]);
   final _intervals = RxList<IntervalEntity>([]);
+  final _laps = RxList<LapEntity>([]);
 
   @override
   SessionEntity get session => _session.value;
@@ -47,6 +51,8 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
   List<DriverEntity> get drivers => _drivers;
   @override
   List<IntervalEntity> get intervals => _intervals;
+  @override
+  List<LapEntity> get laps => _laps;
 
   @override
   Future<void> onInit() async {
@@ -59,11 +65,13 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
     await getDrivers();
     getPositions();
     if (_session.value.sessionType == "Race") getIntervals();
+    if (_session.value.sessionType != "Race") getLaps();
 
     _raceControlTimer = Timer.periodic(Duration(seconds: 5), (timer) {
       getRaceControl();
       getPositions();
       if (_session.value.sessionType == "Race") getIntervals();
+      if (_session.value.sessionType != "Race") getLaps();
     });
 
     _weatherTimer = Timer.periodic(Duration(minutes: 1), (timer) {
@@ -244,6 +252,51 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
       _lastUpdateIntervals = result.first.date;
     } on DomainError catch (error) {
       log(error.toString(), name: 'GetxSessionPresenter.getIntervals');
+      Get.snackbar(
+        'Error',
+        error.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  @override
+  Future<void> getLaps() async {
+    try {
+      List<LapEntity> result = await loadLaps.call(
+          sessionKey: session.sessionKey, lastUpdate: _lastUpdateLaps);
+
+      if (result.isEmpty) {
+        return;
+      }
+
+      // Ordena por data (mais recente primeiro)
+      result.sort((a, b) => b.date.compareTo(a.date));
+
+      // Cria um mapa para armazenar o intervalo mais recente de cada piloto
+      Map<int, LapEntity> latestLapByDriver = {};
+
+      // Percorre todos os intervalos e mantém apenas o mais recente para cada piloto
+      for (var interval in result) {
+        if (!latestLapByDriver.containsKey(interval.driverNumber)) {
+          latestLapByDriver[interval.driverNumber] = interval;
+        } else {
+          // Se o intervalo atual for mais recente, atualiza o mapa
+          if (interval.date
+              .isAfter(latestLapByDriver[interval.driverNumber]!.date)) {
+            latestLapByDriver[interval.driverNumber] = interval;
+          }
+        }
+      }
+
+      // Converte o mapa de volta para uma lista
+      List<LapEntity> filteredIntervals = latestLapByDriver.values.toList();
+
+      _laps.value = filteredIntervals;
+      _lastUpdateLaps = result.first.date;
+    } on DomainError catch (error) {
+      log(error.toString(), name: 'GetxSessionPresenter.getLaps');
       Get.snackbar(
         'Error',
         error.toString(),

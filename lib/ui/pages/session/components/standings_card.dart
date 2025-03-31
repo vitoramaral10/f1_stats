@@ -7,12 +7,14 @@ class StandingsCard extends StatelessWidget {
   final SessionEntity session;
   final List<DriverEntity> drivers;
   final List<IntervalEntity> intervals;
+  final List<LapEntity> laps;
 
   const StandingsCard({
     super.key,
     required this.session,
     required this.drivers,
     required this.intervals,
+    required this.laps,
   });
 
   @override
@@ -54,12 +56,19 @@ class StandingsCard extends StatelessWidget {
                       ],
                     ),
                     Text(
-                      intervals
-                              .firstWhereOrNull(
-                                  (i) => i.driverNumber == driver.driverNumber)
-                              ?.interval
-                              .toString() ??
-                          '',
+                      session.sessionType == 'Race'
+                          ? (intervals
+                                  .firstWhereOrNull((i) =>
+                                      i.driverNumber == driver.driverNumber)
+                                  ?.interval
+                                  .toString() ??
+                              '')
+                          : (laps
+                                  .firstWhereOrNull((l) =>
+                                      l.driverNumber == driver.driverNumber)
+                                  ?.lapDuration
+                                  .toString() ??
+                              ''),
                     ),
                     Text(
                       intervals

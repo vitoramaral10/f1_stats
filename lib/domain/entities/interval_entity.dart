@@ -1,8 +1,8 @@
 class IntervalEntity {
   final DateTime date;
   final int driverNumber;
-  final double? gapToLeader;
-  final double? interval;
+  final dynamic gapToLeader;
+  final dynamic interval;
   final int meetingKey;
   final int sessionKey;
 

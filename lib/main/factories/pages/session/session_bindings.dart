@@ -15,6 +15,7 @@ class _SessionBinding implements Bindings {
         loadDrivers: makeRemoteLoadDrivers(),
         loadPositions: makeRemoteLoadPositions(),
         loadIntervals: makeRemoteLoadIntervals(),
+        loadLaps: makeRemoteLoadLaps(),
       ),
     );
   }
