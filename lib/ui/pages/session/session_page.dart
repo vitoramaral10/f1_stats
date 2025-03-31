@@ -15,26 +15,17 @@ class SessionPage extends GetView<GetxSessionPresenter> {
       appBar: AppBar(
         title: Text(controller.session.sessionName),
       ),
-      body: const Column(
-        children: [
-          SessionHeader(),
-          Expanded(child: StandingsWidget()),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView(
+          children: [
+            WeatherCard(weather: controller.weather),
+            SizedBox(height: 8),
+            RaceControlCard(raceControl: controller.raceControl),
+            Expanded(child: StandingsWidget()),
+          ],
+        ),
       ),
-    );
-  }
-}
-
-class SessionHeader extends GetView<GetxSessionPresenter> {
-  const SessionHeader({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(child: RaceControlCard(raceControl: controller.raceControl)),
-        WeatherCard(weather: controller.weather),
-      ],
     );
   }
 }
