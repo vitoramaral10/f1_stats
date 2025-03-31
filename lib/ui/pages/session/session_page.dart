@@ -22,7 +22,9 @@ class SessionPage extends GetView<GetxSessionPresenter> {
             RaceControlCard(raceControl: controller.raceControl),
             SizedBox(height: 8),
             StandingsCard(
+              session: controller.session,
               drivers: controller.drivers,
+              intervals: controller.intervals,
             ),
           ],
         ),
