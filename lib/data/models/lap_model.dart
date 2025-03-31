@@ -39,7 +39,7 @@ class LapModel {
 
   factory LapModel.fromJson(Map<String, dynamic> json) {
     return LapModel(
-      date: DateTime.parse(json['date']),
+      date: DateTime.parse(json['date_start']),
       driverNumber: json['driver_number'],
       durationSector1: Duration(
         milliseconds: (json['duration_sector_1'] * 1000).round(),
