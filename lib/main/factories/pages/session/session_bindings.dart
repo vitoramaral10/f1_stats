@@ -13,6 +13,7 @@ class _SessionBinding implements Bindings {
         loadRaceControl: makeRemoteLoadRaceControl(),
         loadWeather: makeRemoteLoadWeather(),
         loadDrivers: makeRemoteLoadDrivers(),
+        loadPositions: makeRemoteLoadPositions(),
       ),
     );
   }

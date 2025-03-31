@@ -15,12 +15,16 @@ class RemoteLoadWeather implements LoadWeather {
   @override
   Future<List<WeatherEntity>> call({
     required int sessionKey,
+    DateTime? lastUpdate,
   }) async {
     try {
       final result = await httpClient.request(
         url: url,
         method: 'get',
-        queryParameters: {'session_key=': sessionKey},
+        queryParameters: {
+          'session_key=': sessionKey,
+          if (lastUpdate != null) 'date>': lastUpdate.toIso8601String(),
+        },
       );
 
       return result!

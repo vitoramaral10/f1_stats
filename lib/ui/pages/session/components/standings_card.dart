@@ -15,28 +15,42 @@ class StandingsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Obx(() => ListView(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                children: drivers
-                    .map(
-                      (driver) => ListTile(
-                        title: Row(
-                          children: [
-                            Container(
-                              width: 4,
-                              height: 24,
-                              color: driver.teamColour,
-                            ),
-                            SizedBox(width: 8),
-                            Text(driver.nameAcronym),
-                          ],
-                        ),
+        padding: EdgeInsets.all(16.0),
+        child: Obx(
+          () => ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: drivers.length,
+            itemBuilder: (context, index) {
+              final driver = drivers[index];
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 4.0,
+                ),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 16,
+                      child: Text(
+                        (index + 1).toString(),
+                        textAlign: TextAlign.center,
                       ),
-                    )
-                    .toList(),
-              ))),
+                    ),
+                    SizedBox(width: 8),
+                    Container(
+                      width: 4,
+                      height: 24,
+                      color: driver.teamColour,
+                    ),
+                    SizedBox(width: 8),
+                    Text(driver.nameAcronym),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 }

@@ -9,4 +9,5 @@ abstract class SessionPresenter {
   Future<void> getRaceControl();
   Future<void> getWeather();
   Future<void> getDrivers();
+  Future<void> getPositions();
 }

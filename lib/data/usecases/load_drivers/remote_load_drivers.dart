@@ -30,7 +30,7 @@ class RemoteLoadDrivers implements LoadDrivers {
           .map<DriverEntity>((json) => DriverModel.fromJson(json).toEntity())
           .toList();
     } on HttpError catch (error) {
-      log(error.toString(), name: 'RemoteLoadWeather.call');
+      log(error.toString(), name: 'RemoteLoadDrivers.call');
       throw DomainError.unexpected;
     }
   }

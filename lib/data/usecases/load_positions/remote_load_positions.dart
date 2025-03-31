@@ -6,14 +6,14 @@ import '../../../domain/usecases/usecases.dart';
 import '../../http/http.dart';
 import '../../models/models.dart';
 
-class RemoteLoadRaceControl implements LoadRaceControl {
+class RemoteLoadPositions implements LoadPositions {
   final HttpClient httpClient;
   final String url;
 
-  RemoteLoadRaceControl({required this.httpClient, required this.url});
+  RemoteLoadPositions({required this.httpClient, required this.url});
 
   @override
-  Future<List<RaceControlEntity>> call({
+  Future<List<PositionEntity>> call({
     required int sessionKey,
     DateTime? lastUpdate,
   }) async {
@@ -28,11 +28,11 @@ class RemoteLoadRaceControl implements LoadRaceControl {
       );
 
       return result!
-          .map<RaceControlEntity>(
-              (json) => RaceControlModel.fromJson(json).toEntity())
+          .map<PositionEntity>(
+              (json) => PositionModel.fromJson(json).toEntity())
           .toList();
     } on HttpError catch (error) {
-      log(error.toString(), name: 'RemoteLoadRaceControl.call');
+      log(error.toString(), name: 'RemoteLoadPositions.call');
       throw DomainError.unexpected;
     }
   }
