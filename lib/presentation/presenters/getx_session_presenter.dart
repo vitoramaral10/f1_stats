@@ -264,7 +264,7 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
   @override
   Future<void> getLaps() async {
     try {
-      List<LapEntity> result = await loadLaps.call(
+      List<LapEntity> result =  await loadLaps.call(
           sessionKey: session.sessionKey, lastUpdate: _lastUpdateLaps);
 
       if (result.isEmpty) {
@@ -272,7 +272,7 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
       }
 
       // Ordena por data (mais recente primeiro)
-      result.sort((a, b) => b.date.compareTo(a.date));
+      result.sort((a, b) => b.date!.compareTo(a.date!));
 
       // Cria um mapa para armazenar o intervalo mais recente de cada piloto
       Map<int, LapEntity> latestLapByDriver = {};
@@ -283,8 +283,8 @@ class GetxSessionPresenter extends GetxController implements SessionPresenter {
           latestLapByDriver[interval.driverNumber] = interval;
         } else {
           // Se o intervalo atual for mais recente, atualiza o mapa
-          if (interval.date
-              .isAfter(latestLapByDriver[interval.driverNumber]!.date)) {
+          if (interval.date!
+              .isAfter(latestLapByDriver[interval.driverNumber]!.date!)) {
             latestLapByDriver[interval.driverNumber] = interval;
           }
         }

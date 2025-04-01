@@ -1,20 +1,20 @@
 class LapEntity {
-  final DateTime date;
+  final DateTime? date;
   final int driverNumber;
-  final Duration durationSector1;
-  final Duration durationSector2;
-  final Duration durationSector3;
+  final dynamic durationSector1;
+  final dynamic durationSector2;
+  final dynamic durationSector3;
   final int i1Speed;
   final int i2Speed;
   final bool isPitOutLap;
-  final Duration lapDuration;
+  final dynamic lapDuration;
   final int lapNumber;
   final int meetingKey;
   final int sessionKey;
   final int stSpeed;
-  final List<int> segmentsSector1;
-  final List<int> segmentsSector2;
-  final List<int> segmentsSector3;
+  final List<int?> segmentsSector1;
+  final List<int?> segmentsSector2;
+  final List<int?> segmentsSector3;
 
   LapEntity({
     required this.date,
